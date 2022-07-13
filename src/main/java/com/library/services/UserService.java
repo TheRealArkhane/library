@@ -1,12 +1,11 @@
 package com.library.services;
 
-import com.library.repositories.BookRepository;
+import com.library.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class BookService {
-
-    private final BookRepository bookRepository;
+public class UserService {
+     private final UserRepository userRepository;
 }

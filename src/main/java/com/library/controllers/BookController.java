@@ -1,23 +1,36 @@
 package com.library.controllers;
 
-import com.library.entity.Book;
-import com.library.services.BookService;
-import lombok.AllArgsConstructor;
+import com.library.dto.BookDto;
+import com.library.entities.BookEntity;
+import com.library.entities.Genre;
+import com.library.factories.BookDtoFactory;
+import com.library.repositories.BookRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.transaction.Transactional;
+
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Transactional
 @RestController
-@AllArgsConstructor
-@RequestMapping("/")
 public class BookController {
 
-    private final BookService bookService;
+    private final BookDtoFactory bookDtoFactory;
+    private final BookRepository bookRepository;
 
-    @GetMapping("/{bookId}")
-   public Book getBook(@PathVariable String bookId) {
+    public static final String SHOW_BOOK = "api/books/show";
 
-        return bookService.getBook(Integer.parseInt(bookId));
+    @GetMapping(SHOW_BOOK)
+    public BookDto createBook(@RequestParam String id, String bookName, String author, Genre genre) {
+        return BookDtoFactory.makeBookDto(new BookEntity("0230124129",
+                "Kolyas: Origins",
+                "Kolyas",
+                "Комедия",
+                null));
     }
 }
