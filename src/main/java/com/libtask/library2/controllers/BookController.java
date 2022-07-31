@@ -22,8 +22,7 @@ public class BookController {
     @PostMapping("/add")
     public String addBookPost(@RequestParam String name,
                               @RequestParam String author,
-                              //добавлю возможность выбора, а не ввода, от этого исправлю
-                              //и конструктор сущности
+                              //добавлю возможность выбора, а не ввода, от этого исправлю и конструктор сущности
                               @RequestParam String genre, Model model) {
         Book book = new Book(Book.generateISBN(), name, author, genre, null);
         bookRepository.save(book);

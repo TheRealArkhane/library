@@ -1,10 +1,12 @@
 package com.libtask.library2.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -21,6 +23,12 @@ public class User {
     String firstName;
     String lastName;
     String email;
+    @JsonIgnore
+    String password;
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.LAZY)
+    @CollectionTable(name = "users", joinColumns = @JoinColumn(name = "id"))
+    @Enumerated(EnumType.STRING)
+    Set<Role> roles;
 
     @Override
     public boolean equals(Object o) {
