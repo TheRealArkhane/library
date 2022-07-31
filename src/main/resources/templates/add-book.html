@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+        <a class="me-3 py-2 text-dark text-decoration-none" href="/books/catalog">Каталог</a>
+        <a class="me-3 py-2 text-dark text-decoration-none" href="#">Войти</a>
+        <a class="me-3 py-2 text-dark text-decoration-none" href="#">Зарегистрироваться</a>
+    </nav>
+    <title>Дбоавление книги</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Добавление книги</h1>
+<form action="/books/add" method="post">
+    <input type="text" name="name" placeholder="Введите название книги" class="form-control">
+    <input type="text" name="author" placeholder="Введите ФИО автора книги (Иванов И.И.)" class="form-control">
+    <input type="text" name="genre" placeholder="Выберите жанр книги (не реализовано, введите вручную)" class="form-control">
+    <button type="submit" class="btn-btn-success">Добавить книгу</button>
+</form>
+</body>
+</html>
