@@ -14,18 +14,18 @@ import static java.lang.Math.random;
 @Getter
 @Setter
 @ToString
-@Builder
-@NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table (name = "books")
 public class Book {
     static Random random = new Random();
     @Id
-    String id = generateISBN();
+    String id;
     String name;
     String author;
-    String genre;
+    @Enumerated(EnumType.STRING)
+    Genre genre;
     String userId;
 
     @Override
@@ -41,11 +41,4 @@ public class Book {
         return getClass().hashCode();
     }
 
-    public static String generateISBN() {
-        return  (100 + (int) (random() * 900))  + "-"
-                + (int) (random() * 10) + "-"
-                + (10 + (int) (random() * 90)) + "-"
-                + (100000 + (int) (random() * 900000)) + "-"
-                + (int) (random() * 10);
-    }
 }

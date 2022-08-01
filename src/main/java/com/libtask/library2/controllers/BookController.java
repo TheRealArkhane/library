@@ -1,17 +1,16 @@
 package com.libtask.library2.controllers;
 
 import com.libtask.library2.entities.Book;
+import com.libtask.library2.entities.Genre;
 import com.libtask.library2.repositories.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import lombok.AllArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
+@AllArgsConstructor
 @RequestMapping("/books")
 public class BookController {
-
-    @Autowired
     private BookRepository bookRepository;
 
     @GetMapping("/add")
@@ -20,11 +19,12 @@ public class BookController {
     }
 
     @PostMapping("/add")
-    public String addBookPost(@RequestParam String name,
-                              @RequestParam String author,
-                              //добавлю возможность выбора, а не ввода, от этого исправлю и конструктор сущности
-                              @RequestParam String genre, Model model) {
-        Book book = new Book(Book.generateISBN(), name, author, genre, null);
+    public String addBookPost(@RequestBody String id,
+                              String name,
+                              String author,
+                              String genre,
+                              Model model) {
+        Book book = new Book(id, name, author, Genre.valueOf(genre), null);
         bookRepository.save(book);
         return "redirect:/books/catalog";
     }
@@ -32,7 +32,7 @@ public class BookController {
 
     @GetMapping("/catalog")
     public String catalog(Model model) {
-        return bookRepository.findAll().toString();
+        return String.valueOf(bookRepository.findAll());
     }
 
     @GetMapping("/{id}")
