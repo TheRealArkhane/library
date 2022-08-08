@@ -1,14 +1,9 @@
 package com.libtask.library2.controllers;
 
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HomeController {
-
-    @GetMapping("/")
-    public String greeting(Model model) {
-        return "home";
-    }
+    //не имею ни малейшего представления, что на данный момент делать с этим контроллером,
+    //когда он REST и MvcConfig уже перенаправляет на HTML темплейт
 }

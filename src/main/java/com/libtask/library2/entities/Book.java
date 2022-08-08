@@ -13,6 +13,7 @@ import static java.lang.Math.random;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 @ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -21,24 +22,16 @@ import static java.lang.Math.random;
 public class Book {
     static Random random = new Random();
     @Id
+    @Column(name = "id")
     String id;
+    @Column(name = "name")
     String name;
+    @Column (name = "author")
     String author;
     @Enumerated(EnumType.STRING)
+    @Column(name = "genre")
     Genre genre;
+    @Column(name = "user_id")
     String userId;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Book that = (Book) o;
-        return id != null && Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
-
 }
+
