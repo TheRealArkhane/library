@@ -20,11 +20,8 @@ public class UserService {
           return userRepository.findById(id).get();
      }
 
-     public void takeBook(User user, Book bookOnBalance) {
-          userRepository.takeBook(user.getId(), bookOnBalance.getId());
+     public void changeEmail(String email, User user) {
+          userRepository.changeEmail(email, user.getId());
      }
 
-     public void returnBook(User user, Book bookToReturn) {
-          userRepository.returnBook(user.getId(), bookToReturn.getId());
-     }
 }

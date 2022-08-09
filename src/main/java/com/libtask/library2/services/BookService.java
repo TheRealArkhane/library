@@ -7,6 +7,7 @@ import com.libtask.library2.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Service
@@ -27,6 +28,7 @@ public class BookService {
         return bookRepository.getBooksOnBalance();
     }
 
+    @OneToMany
     public List<Book> getTakenBooksListByUser(User user) {
         return bookRepository.getTakenBooksListByUserId(user.getId());
     }

@@ -3,9 +3,7 @@ package com.libtask.library2.controllers;
 import com.libtask.library2.entities.User;
 import com.libtask.library2.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,11 +12,12 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
     
-    UserService userService;
+    private final UserService userService;
 
     @GetMapping("/all")
-    public List<User> showAllUsers () {
+    public List<User> showAllUsers() {
         return userService.showAllUsers();
     }
+
 }
 

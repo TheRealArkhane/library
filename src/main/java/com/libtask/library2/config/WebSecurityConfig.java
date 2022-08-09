@@ -6,13 +6,20 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -30,42 +37,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     @Override
-    public UserDetailsService userDetailsService() {
-        UserDetails user0 =
-                User.withDefaultPasswordEncoder()
-                        .username("amirlox@mail.ru")
-                        .password("1234")
-                        .roles("USER")
-                        .build();
+    protected UserDetailsService userDetailsService(){
+        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 
-        UserDetails user1 =
-                User.withDefaultPasswordEncoder()
-                        .username("business_genius@belprodo.com")
-                        .password("1234")
-                        .roles("USER")
-                        .build();
+        manager.createUser(User.withUsername("amirlox@mail.ru")
+                .password(passwordEncoder().encode("1234"))
+                .authorities("USER").build());
 
-        UserDetails user2 =
-                User.withDefaultPasswordEncoder()
-                        .username("typo_albanec228@gmail.com")
-                        .password("1234")
-                        .roles("USER")
-                        .build();
+        manager.createUser(User.withUsername("business_genius@belprodo.com")
+                .password(passwordEncoder().encode("123456"))
+                .authorities("USER").build());
 
-        UserDetails user3 =
-                User.withDefaultPasswordEncoder()
-                        .username("fedyanin.v.v@yandex.ru")
-                        .password("1234")
-                        .roles("USER")
-                        .build();
+        manager.createUser(User.withUsername("typo_albanec228@gmail.com")
+                .password(passwordEncoder().encode("123qwe"))
+                .authorities("USER").build());
 
-        UserDetails admin0 =
-                User.withDefaultPasswordEncoder()
-                        .username("pr0-r0ck-sunb0y@mail.ru")
-                        .password("1234")
-                        .roles("ADMIN")
-                        .build();
+        manager.createUser(User.withUsername("fedyanin.v.v@yandex.ru")
+                .password(passwordEncoder().encode("qwertY123"))
+                .authorities("USER").build());
 
-        return new InMemoryUserDetailsManager(user0, user1, user2, user3, admin0);
+        manager.createUser(User.withUsername("pr0-r0ck-sunb0y@mail.ru")
+                .password(passwordEncoder().encode("sunboy1992"))
+                .authorities("ADMIN").build());
+
+        return manager;
     }
 }
