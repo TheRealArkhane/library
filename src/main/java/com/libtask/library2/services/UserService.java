@@ -16,8 +16,8 @@ public class UserService {
           return userRepository.showAllUsers();
      }
 
-     public User getUserById(String id) {
-          return userRepository.findById(id).get();
+     public User getUserById(int id) {
+          return userRepository.findById(String.valueOf(id)).get();
      }
 
      public void changeEmail(String email, User user) {

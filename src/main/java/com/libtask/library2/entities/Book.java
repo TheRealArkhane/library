@@ -2,13 +2,8 @@ package com.libtask.library2.entities;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.Objects;
-import java.util.Random;
-
-import static java.lang.Math.random;
 
 @Entity
 @Getter
@@ -16,18 +11,25 @@ import static java.lang.Math.random;
 @EqualsAndHashCode
 @ToString
 @RequiredArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table (name = "books")
 public class Book {
-    static Random random = new Random();
+
     @Id
     @Column(name = "id")
-    String id;
+    @GeneratedValue (strategy = GenerationType.TABLE)
+    int id;
+    @NonNull
+    @Column(name = "isbn")
+    String isbn;
+    @NonNull
     @Column(name = "name")
     String name;
+    @NonNull
     @Column (name = "author")
     String author;
+    @NonNull
     @Enumerated(EnumType.STRING)
     @Column(name = "genre")
     Genre genre;

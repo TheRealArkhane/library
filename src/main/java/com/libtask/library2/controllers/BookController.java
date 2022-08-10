@@ -20,8 +20,8 @@ public class BookController {
     }
 
     @PostMapping("/add")
-    public void addBookPost(@RequestBody String id, String name, String author, Genre genre) {
-        bookService.addBook(id, name, author, genre);
+    public void addBookPost(@RequestBody String isbn, String name, String author, Genre genre) {
+        bookService.addBook(isbn, name, author, genre);
     }
 
 
@@ -31,8 +31,8 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Book bookInfo(@PathVariable(value = "id") String id) {
-        return bookService.getBook(id);
+    public Book bookInfo(@PathVariable(value = "id") int id) {
+        return bookService.getBookById(id);
     }
 
 }

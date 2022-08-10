@@ -17,5 +17,20 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Modifying
     @Query(value = "UPDATE users SET email = :newEmail WHERE users.id = :user_id", nativeQuery = true)
-    void changeEmail(@Param("newEmail") String email, @Param("user_id") String userId);
+    void changeEmail(@Param("newEmail") String email, @Param("user_id") int userId);
+
+    @Modifying
+    @Query(value = "UPDATE books " +
+            "SET user_id = :user_id " +
+            "WHERE books.id = :book_id " +
+            "AND books.user_id IS NULL",
+            nativeQuery = true)
+    void takeBook (@Param("user_id") int userId, @Param("book_id") int bookId);
+
+    @Modifying
+    @Query(value = "UPDATE books SET user_id = NULL " +
+            "WHERE books.user_id = :user_id " +
+            "AND books.id = :book_id",
+            nativeQuery = true)
+    void returnBook (@Param("user_id") int userId, @Param("book_id") int bookId);
 }
