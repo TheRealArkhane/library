@@ -16,7 +16,7 @@ public class BookController {
 
     @GetMapping("/add")
     public void addBook() {
-        //необходима реализация json
+        //необходима реализация фронта
     }
 
     @PostMapping("/add")

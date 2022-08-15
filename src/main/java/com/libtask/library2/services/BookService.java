@@ -4,11 +4,10 @@ import com.libtask.library2.entities.Book;
 import com.libtask.library2.entities.Genre;
 import com.libtask.library2.entities.User;
 import com.libtask.library2.repositories.BookRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.object.SqlCall;
 import org.springframework.stereotype.Service;
 
-import javax.management.Query;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookService {
 
+    @NonNull
     private final BookRepository bookRepository;
     public List<Book> showCatalog() {
         return bookRepository.showCatalog();

@@ -1,22 +1,28 @@
 package com.libtask.library2.config;
 
+import com.libtask.library2.services.UserService;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @NonNull
+    private final UserService userService;
+
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -25,41 +31,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
+                .antMatchers("/", "/api/registration")
                 .permitAll()
-                .and()
-                .logout()
-                .permitAll();
+                .anyRequest()
+                .authenticated().and()
+                .formLogin();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(daoAuthenticationProvider());
     }
 
     @Bean
-    @Override
-    protected UserDetailsService userDetailsService(){
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-
-        manager.createUser(User.withUsername("amirlox@mail.ru")
-                .password(passwordEncoder().encode("1234"))
-                .authorities("USER").build());
-
-        manager.createUser(User.withUsername("business_genius@belprodo.com")
-                .password(passwordEncoder().encode("123456"))
-                .authorities("USER").build());
-
-        manager.createUser(User.withUsername("typo_albanec228@gmail.com")
-                .password(passwordEncoder().encode("123qwe"))
-                .authorities("USER").build());
-
-        manager.createUser(User.withUsername("fedyanin.v.v@yandex.ru")
-                .password(passwordEncoder().encode("qwertY123"))
-                .authorities("USER").build());
-
-        manager.createUser(User.withUsername("pr0-r0ck-sunb0y@mail.ru")
-                .password(passwordEncoder().encode("sunboy1992"))
-                .authorities("ADMIN").build());
-
-        return manager;
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider provider =
+                new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(userService);
+        return provider;
     }
 }

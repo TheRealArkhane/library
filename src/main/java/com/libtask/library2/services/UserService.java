@@ -1,15 +1,21 @@
 package com.libtask.library2.services;
 
-import com.libtask.library2.entities.Book;
+import com.libtask.library2.config.WebSecurityConfig;
 import com.libtask.library2.entities.User;
 import com.libtask.library2.repositories.UserRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
+     @NonNull
      private final UserRepository userRepository;
 
      public List<User> showAllUsers() {
@@ -24,4 +30,23 @@ public class UserService {
           userRepository.changeEmail(email, user.getId());
      }
 
+     @Override
+     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+          return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+     }
+
+     public String signUpUser(User user) {
+          boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
+
+          if (userExists) {
+               throw new IllegalStateException("email already taken");
+          }
+
+          String encodedPassword = WebSecurityConfig.passwordEncoder().encode(user.getPassword());
+          user.setPassword(encodedPassword);
+
+          userRepository.save(user);
+
+          return "it's alive!";
+     }
 }

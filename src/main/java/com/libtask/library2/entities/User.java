@@ -2,8 +2,10 @@ package com.libtask.library2.entities;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Getter
@@ -14,11 +16,11 @@ import javax.persistence.*;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table (name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     int id;
     @Column(name = "first_name")
     @NonNull
@@ -29,4 +31,41 @@ public class User {
     @NonNull
     @Column(name = "email")
     String email;
+    @NonNull
+    @Column(name = "encrypted_password")
+    String password;
+    @NonNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    Role role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
