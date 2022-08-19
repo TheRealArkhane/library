@@ -1,6 +1,7 @@
 package com.libtask.library2.controllers;
 
 import com.libtask.library2.entities.Book;
+import com.libtask.library2.entities.BookDto;
 import com.libtask.library2.entities.Genre;
 import com.libtask.library2.services.BookService;
 import lombok.AllArgsConstructor;
@@ -15,18 +16,20 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping("/add")
-    public void addBook() {
-        //необходима реализация фронта
+    public String addBook() {
+        //фронт, вестимо
+        return "add-book";
     }
 
+
     @PostMapping("/add")
-    public void addBookPost(@RequestBody String isbn, String name, String author, Genre genre) {
-        bookService.addBook(isbn, name, author, genre);
+    public Book addBookPost(@RequestBody BookDto bookDto) {
+       return bookService.addBook(bookDto);
     }
 
 
     @GetMapping("/catalog")
-    public List<Book> catalog() {
+    public List<Book> getCatalog() {
         return bookService.showCatalog();
     }
 

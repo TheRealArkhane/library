@@ -11,29 +11,29 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findByEmail(String email);
 
-    @Query(value = "SELECT first_name,last_name FROM users", nativeQuery = true)
+    @Query(value = "SELECT * FROM app_user", nativeQuery = true)
     List<User> showAllUsers();
 
     @Modifying
-    @Query(value = "UPDATE users SET email = :newEmail WHERE users.id = :user_id", nativeQuery = true)
+    @Query(value = "UPDATE app_user SET email = :newEmail WHERE app_user.id = :user_id", nativeQuery = true)
     void changeEmail(@Param("newEmail") String email, @Param("user_id") int userId);
 
     @Modifying
-    @Query(value = "UPDATE books " +
+    @Query(value = "UPDATE book " +
             "SET user_id = :user_id " +
-            "WHERE books.id = :book_id " +
-            "AND books.user_id IS NULL",
+            "WHERE book.id = :book_id " +
+            "AND book.user_id IS NULL",
             nativeQuery = true)
     void takeBook (@Param("user_id") int userId, @Param("book_id") int bookId);
 
     @Modifying
-    @Query(value = "UPDATE books SET user_id = NULL " +
-            "WHERE books.user_id = :user_id " +
-            "AND books.id = :book_id",
+    @Query(value = "UPDATE book SET user_id = NULL " +
+            "WHERE book.user_id = :user_id " +
+            "AND book.id = :book_id",
             nativeQuery = true)
     void returnBook (@Param("user_id") int userId, @Param("book_id") int bookId);
 }

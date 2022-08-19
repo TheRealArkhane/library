@@ -23,7 +23,7 @@ public class UserService implements UserDetailsService {
      }
 
      public User getUserById(int id) {
-          return userRepository.findById(String.valueOf(id)).get();
+          return userRepository.findById(id).get();
      }
 
      public void changeEmail(String email, User user) {
@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
           return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
      }
 
-     public String signUpUser(User user) {
+     public void signUpUser(User user) {
           boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
 
           if (userExists) {
@@ -44,9 +44,6 @@ public class UserService implements UserDetailsService {
 
           String encodedPassword = WebSecurityConfig.passwordEncoder().encode(user.getPassword());
           user.setPassword(encodedPassword);
-
           userRepository.save(user);
-
-          return "it's alive!";
      }
 }

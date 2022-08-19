@@ -8,15 +8,15 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book, String> {
+public interface BookRepository extends JpaRepository<Book, Integer> {
 
-    @Query(value = "SELECT name,author,genre FROM books", nativeQuery = true)
-    List<Book> showCatalog();
+    @Query(value = "SELECT * FROM book", nativeQuery = true)
+    List<Book> showAllBooks();
 
-    @Query(value = "SELECT name,author,genre FROM books WHERE user_id IS NULL", nativeQuery = true)
+    @Query(value = "SELECT * FROM book WHERE user_id IS NULL", nativeQuery = true)
     List<Book> getBooksOnBalance();
 
-    @Query(value = "SELECT name,author,genre FROM books WHERE user_id = :user_id", nativeQuery = true)
+    @Query(value = "SELECT * FROM book WHERE user_id = :user_id", nativeQuery = true)
     List<Book> getTakenBooksListByUserId(@Param("user_id") int userId);
 
 }

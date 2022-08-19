@@ -14,11 +14,13 @@ public class BalanceService {
     @NonNull
     private UserRepository userRepository;
 
-    public void takeBook(User user, Book bookOnBalance) {
+    public User takeBook(User user, Book bookOnBalance) {
         userRepository.takeBook(user.getId(), bookOnBalance.getId());
+        return user;
     }
 
-    public void returnBook(User user, Book bookToReturn) {
+    public User returnBook(User user, Book bookToReturn) {
         userRepository.returnBook(user.getId(), bookToReturn.getId());
+        return user;
     }
 }

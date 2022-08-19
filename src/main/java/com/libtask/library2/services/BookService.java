@@ -1,6 +1,7 @@
 package com.libtask.library2.services;
 
 import com.libtask.library2.entities.Book;
+import com.libtask.library2.entities.BookDto;
 import com.libtask.library2.entities.Genre;
 import com.libtask.library2.entities.User;
 import com.libtask.library2.repositories.BookRepository;
@@ -20,11 +21,11 @@ public class BookService {
     @NonNull
     private final BookRepository bookRepository;
     public List<Book> showCatalog() {
-        return bookRepository.showCatalog();
+        return bookRepository.showAllBooks();
     }
 
     public Book getBookById(int id) {
-        return bookRepository.findById(String.valueOf(id)).get();
+        return bookRepository.findById(id).get();
     }
 
     public List<Book> getBooksOnBalance() {
@@ -36,9 +37,14 @@ public class BookService {
         return bookRepository.getTakenBooksListByUserId(user.getId());
     }
 
-    public void addBook(String isbn, String name, String author, Genre genre) {
-        Book book = new Book(isbn, name, author, genre);
-        bookRepository.save(book);
+    public Book addBook(BookDto bookDto) {
+        Book newBook = new Book(
+                bookDto.getIsbn(),
+                bookDto.getName(),
+                bookDto.getAuthor(),
+                bookDto.getGenre());
+        bookRepository.save(newBook);
+        return newBook;
     }
 
     public void deleteBook(Book book) {

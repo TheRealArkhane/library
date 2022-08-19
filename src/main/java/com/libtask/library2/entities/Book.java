@@ -13,13 +13,13 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table (name = "books")
+@Table (name = "book")
 public class Book {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
-    int id;
+    @Column(name = "id", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer id;
     @NonNull
     @Column(name = "isbn")
     String isbn;
@@ -30,10 +30,9 @@ public class Book {
     @Column (name = "author")
     String author;
     @NonNull
-    @Enumerated(EnumType.STRING)
     @Column(name = "genre")
     Genre genre;
-    @Column(name = "user_id")
-    String userId;
+    @Column(name = "user_id",nullable = true)
+    Integer userId;
 }
 

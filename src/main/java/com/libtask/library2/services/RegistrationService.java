@@ -1,11 +1,8 @@
 package com.libtask.library2.services;
 
-import com.libtask.library2.config.WebSecurityConfig;
 import com.libtask.library2.entities.RegistrationRequest;
 import com.libtask.library2.entities.Role;
 import com.libtask.library2.entities.User;
-import lombok.AllArgsConstructor;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,14 +10,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RegistrationService {
 
-    public String register(RegistrationRequest request) {
-        new User (
+    private final UserService userService;
+
+    public User register(RegistrationRequest request) {
+        User newUser = new User (
                 request.getFirstName(),
                 request.getLastName(),
                 request.getEmail(),
                 request.getPassword(),
                 Role.USER
         );
-        return "works";
+        userService.signUpUser(newUser);
+        return newUser;
     }
 }

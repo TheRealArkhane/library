@@ -14,13 +14,13 @@ public class BalanceController {
     private final BalanceService balanceService;
 
     @PutMapping("/book/take")
-    public void takeBook (Book book, User user) {
-        balanceService.takeBook(user, book);
+    public User takeBook (Book book, User user) {
+        return balanceService.takeBook(user, book);
     }
 
     @PutMapping("/book/return")
-    public void returnBook (Book book, User user) {
-        balanceService.returnBook(user, book);
+    public User returnBook (Book book, User user) {
+        return balanceService.returnBook(user, book);
     }
 
 }

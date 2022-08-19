@@ -1,23 +1,25 @@
 package com.libtask.library2.controllers;
 
 import com.libtask.library2.entities.RegistrationRequest;
+import com.libtask.library2.entities.User;
 import com.libtask.library2.services.RegistrationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "api/registration")
 @RequiredArgsConstructor
 public class RegistrationController {
 
     private final RegistrationService registrationService;
 
-    @PostMapping
-    public String register(@RequestBody RegistrationRequest request) {
-        return registrationService.register(request);
+    @GetMapping(path = "/reg")
+    public String register() {
+        return "let's sign up!";
+    }
+
+    @PostMapping(path = "/reg")
+    public User register(@RequestBody RegistrationRequest request) {
+       return registrationService.register(request);
     }
 
 }

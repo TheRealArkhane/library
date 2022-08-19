@@ -12,31 +12,31 @@ import java.util.Collection;
 @Setter
 @EqualsAndHashCode
 @ToString
-@RequiredArgsConstructor
 @NoArgsConstructor
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table (name = "users")
+@Table (name = "app_user")
 public class User implements UserDetails {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    int id;
+    @Column(name = "id", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Integer id;
     @Column(name = "first_name")
     @NonNull
     String firstName;
     @Column(name = "last_name")
     @NonNull
     String lastName;
-    @NonNull
     @Column(name = "email")
-    String email;
     @NonNull
+    String email;
     @Column(name = "encrypted_password")
+    @NonNull
     String password;
+    @Column(name = "role")
     @NonNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
     Role role;
 
     @Override
