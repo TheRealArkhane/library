@@ -19,7 +19,7 @@ public class Book {
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
     @NonNull
     @Column(name = "isbn")
     String isbn;
@@ -32,7 +32,7 @@ public class Book {
     @NonNull
     @Column(name = "genre")
     Genre genre;
-    @Column(name = "user_id",nullable = true)
+    @Column(name = "user_id")
     Integer userId;
 }
 

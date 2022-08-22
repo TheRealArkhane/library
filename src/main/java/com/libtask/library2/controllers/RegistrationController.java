@@ -12,12 +12,11 @@ public class RegistrationController {
 
     private final RegistrationService registrationService;
 
-    @GetMapping(path = "/reg")
-    public String register() {
-        return "let's sign up!";
+    @GetMapping(path = "/registration")
+    public void register() {
     }
 
-    @PostMapping(path = "/reg")
+    @PostMapping(path = "/registration")
     public User register(@RequestBody RegistrationRequest request) {
        return registrationService.register(request);
     }

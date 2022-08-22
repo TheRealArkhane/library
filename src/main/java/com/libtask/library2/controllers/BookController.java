@@ -2,7 +2,6 @@ package com.libtask.library2.controllers;
 
 import com.libtask.library2.entities.Book;
 import com.libtask.library2.entities.BookDto;
-import com.libtask.library2.entities.Genre;
 import com.libtask.library2.services.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,18 +14,10 @@ import java.util.List;
 public class BookController {
     private final BookService bookService;
 
-    @GetMapping("/add")
-    public String addBook() {
-        //фронт, вестимо
-        return "add-book";
-    }
-
-
     @PostMapping("/add")
     public Book addBookPost(@RequestBody BookDto bookDto) {
        return bookService.addBook(bookDto);
     }
-
 
     @GetMapping("/catalog")
     public List<Book> getCatalog() {
@@ -34,8 +25,12 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Book bookInfo(@PathVariable(value = "id") int id) {
+    public Book bookInfo(@PathVariable(value = "id") Long id) {
         return bookService.getBookById(id);
     }
 
+    @PutMapping("/delete")
+    public void deleteBook(@RequestParam Long id) {
+        bookService.deleteBook(bookService.getBookById(id));
+    }
 }

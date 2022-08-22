@@ -24,7 +24,7 @@ public class BookService {
         return bookRepository.showAllBooks();
     }
 
-    public Book getBookById(int id) {
+    public Book getBookById(Long id) {
         return bookRepository.findById(id).get();
     }
 
@@ -32,9 +32,8 @@ public class BookService {
         return bookRepository.getBooksOnBalance();
     }
 
-    @OneToMany
-    public List<Book> getTakenBooksListByUser(User user) {
-        return bookRepository.getTakenBooksListByUserId(user.getId());
+    public List<Book> getTakenBooksListByUserId(Long userId) {
+        return bookRepository.getTakenBooksListByUserId(userId);
     }
 
     public Book addBook(BookDto bookDto) {
@@ -48,25 +47,35 @@ public class BookService {
     }
 
     public void deleteBook(Book book) {
+        if (book.getUserId() != null) {
+            throw new RuntimeException("Невозможно удалить взятую книгу");
+        }
         bookRepository.delete(book);
     }
 
-    public List<Book> sortByAuthor(List<Book> bookList, String author) {
-        return bookList.stream().filter(book -> book.getAuthor().equalsIgnoreCase(author)).collect(Collectors.toList());
-        // instead of .equalsIgnoreCase(...) there can be .contains(...)
+    public static List<Book> sortByAuthor(List<Book> bookList, String author) {
+        return bookList.stream()
+                .filter(book -> book.getAuthor().equalsIgnoreCase(author))
+                .collect(Collectors.toList());
+        // instead of .equalsIgnoreCase(...) can there be .contains(CharSequence ...)?
     }
 
     public List<Book> sortByName(List<Book> bookList, String name) {
-        return bookList.stream().filter(book -> book.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
-        // instead of .equalsIgnoreCase(...) there can be .contains(...)
+        return bookList.stream()
+                .filter(book -> book.getName().equalsIgnoreCase(name))
+                .collect(Collectors.toList());
+        // instead of .equalsIgnoreCase(...) can there be .contains(CharSequence ...)?
     }
 
     public List<Book> sortByGenre(List<Book> bookList, Genre genre) {
-        return bookList.stream().filter(book -> book.getGenre().equals(genre)).collect(Collectors.toList());
+        return bookList.stream()
+                .filter(book -> book.getGenre().equals(genre))
+                .collect(Collectors.toList());
+        // instead of .equalsIgnoreCase(...) can there be .contains(CharSequence ...)?
     }
 
     //собственное решение
-    public List<List<Book>> partitionToPages(List<Book> bookList, int pageValue) {
+    public List<List<Book>> pagination(List<Book> bookList, int pageValue) {
         List<List<Book>> pagesList = new ArrayList<>();
         int size = bookList.size();
         for (int i = 0; i <= bookList.size() / pageValue; i++) {
@@ -84,7 +93,7 @@ public class BookService {
     }
 
     //найденное решение
-    public List<List<Book>> newPartitionToPages(List<Book> bookList, int pageValue) {
+    public List<List<Book>> newPagination(List<Book> bookList, int pageValue) {
         List<List<Book>> pagesList = new ArrayList<>();
         for (int i = 0; i < bookList.size(); i += pageValue) {
             pagesList.add(bookList.subList(i, Math.min(i + pageValue, bookList.size())));

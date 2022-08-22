@@ -2,6 +2,7 @@ package com.libtask.library2.services;
 
 import com.libtask.library2.entities.Book;
 import com.libtask.library2.entities.User;
+import com.libtask.library2.repositories.BookRepository;
 import com.libtask.library2.repositories.UserRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -13,14 +14,25 @@ public class BalanceService {
 
     @NonNull
     private UserRepository userRepository;
+    @NonNull
+    private BookRepository bookRepository;
 
-    public User takeBook(User user, Book bookOnBalance) {
-        userRepository.takeBook(user.getId(), bookOnBalance.getId());
+    public User addBookToUserBalance(User user, Book bookToTake) {
+        if (!userRepository.existsById(user.getId())
+                || !bookRepository.existsById(bookToTake.getId())
+                || bookRepository.findById(bookToTake.getId()).get().getUserId() != null) {
+            throw new IllegalStateException("не соблюдены условия выполнения");
+        }
+        userRepository.addBookToUserBalance(user.getId(), bookToTake.getId());
         return user;
     }
 
-    public User returnBook(User user, Book bookToReturn) {
-        userRepository.returnBook(user.getId(), bookToReturn.getId());
-        return user;
+    public void removeBookFromUserBalance(User user, Book bookToReturn) {
+        if (!userRepository.existsById(user.getId())
+                || !bookRepository.existsById(bookToReturn.getId())
+                || bookRepository.findById(bookToReturn.getId()).get().getUserId() == null) {
+            throw new IllegalStateException("не соблюдены условия выполнения");
+        }
+        userRepository.removeBookFromUserBalance(user.getId(), bookToReturn.getId());
     }
 }

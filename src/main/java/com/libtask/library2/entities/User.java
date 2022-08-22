@@ -21,7 +21,7 @@ public class User implements UserDetails {
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
+    Long id;
     @Column(name = "first_name")
     @NonNull
     String firstName;

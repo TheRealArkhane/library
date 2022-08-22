@@ -3,14 +3,16 @@ package com.libtask.library2.services;
 import com.libtask.library2.entities.RegistrationRequest;
 import com.libtask.library2.entities.Role;
 import com.libtask.library2.entities.User;
+import com.libtask.library2.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class RegistrationService {
-
-    private final UserService userService;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User register(RegistrationRequest request) {
         User newUser = new User (
@@ -20,7 +22,16 @@ public class RegistrationService {
                 request.getPassword(),
                 Role.USER
         );
-        userService.signUpUser(newUser);
+        if (userRepository.existsByEmailIgnoreCase(newUser.getEmail())) {
+            throw new IllegalStateException("пользователь с этой почтой уже зарегистрирован");
+        }
+        signUpUser(newUser);
         return newUser;
+    }
+
+    public void signUpUser(User user) {
+            String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPassword);
+            userRepository.save(user);
     }
 }

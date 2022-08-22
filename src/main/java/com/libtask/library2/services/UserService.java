@@ -1,6 +1,5 @@
 package com.libtask.library2.services;
 
-import com.libtask.library2.config.WebSecurityConfig;
 import com.libtask.library2.entities.User;
 import com.libtask.library2.repositories.UserRepository;
 import lombok.NonNull;
@@ -22,7 +21,7 @@ public class UserService implements UserDetailsService {
           return userRepository.showAllUsers();
      }
 
-     public User getUserById(int id) {
+     public User getUserById(Long id) {
           return userRepository.findById(id).get();
      }
 
@@ -32,18 +31,7 @@ public class UserService implements UserDetailsService {
 
      @Override
      public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-          return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-     }
-
-     public void signUpUser(User user) {
-          boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
-
-          if (userExists) {
-               throw new IllegalStateException("email already taken");
-          }
-
-          String encodedPassword = WebSecurityConfig.passwordEncoder().encode(user.getPassword());
-          user.setPassword(encodedPassword);
-          userRepository.save(user);
+          return userRepository.findByEmail(email).orElseThrow(()
+                  -> new UsernameNotFoundException("Пользователь не найден"));
      }
 }
