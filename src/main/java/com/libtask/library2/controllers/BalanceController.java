@@ -28,7 +28,7 @@ public class BalanceController {
     }
 
     @PutMapping("/return")
-    public User removeBookFromUserBalance(@RequestParam Long userId, @RequestParam Long bookId) {
+    public void removeBookFromUserBalance(@RequestParam Long userId, @RequestParam Long bookId) {
         balanceService.removeBookFromUserBalance(
                 userService.getUserById(userId),
                 bookService.getBookById(bookId));
