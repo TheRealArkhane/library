@@ -32,6 +32,5 @@ public class BalanceController {
         balanceService.removeBookFromUserBalance(
                 userService.getUserById(userId),
                 bookService.getBookById(bookId));
-        return userService.getUserById(userId);
     }
 }
