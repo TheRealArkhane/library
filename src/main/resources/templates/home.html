@@ -1,17 +1,10 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-        <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-            <a class="me-3 py-2 text-dark text-decoration-none" href="/books/catalog">Книги</a>
-            <a class="me-3 py-2 text-dark text-decoration-none" href="/user/all">Пользователи</a>
-        </nav>
-    <title>Главная страница</title>
+    <title th:text = "${title}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<h1 th:inline="text">Здравствуйте, [[${#httpServletRequest.remoteUser}]]!</h1>
-<form th:action="@{/logout}" method="post">
-    <input type="submit" value="Log Out"/>
-</form>
+<p th:text="'Hello, World!'" />
 </body>
 </html>
