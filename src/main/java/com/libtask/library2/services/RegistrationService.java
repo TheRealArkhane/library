@@ -23,7 +23,7 @@ public class RegistrationService {
                 Role.USER
         );
         if (userRepository.existsByEmailIgnoreCase(newUser.getEmail())) {
-            throw new IllegalStateException("пользователь с этой почтой уже зарегистрирован");
+            throw new IllegalStateException("Пользователь с этой почтой уже зарегистрирован");
         }
         signUpUser(newUser);
         return newUser;

@@ -14,15 +14,13 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    User findByEmailIgnoreCase(String email);
+
     Optional<User> findByEmail(String email);
 
     boolean existsByEmailIgnoreCase(String email);
     @Query(value = "SELECT * FROM app_user", nativeQuery = true)
     List<User> showAllUsers();
-
-    @Modifying
-    @Query(value = "UPDATE app_user SET email = :newEmail WHERE app_user.id = :user_id", nativeQuery = true)
-    void changeEmail(@Param("newEmail") String email, @Param("user_id") Long userId);
 
     @Transactional
     @Modifying

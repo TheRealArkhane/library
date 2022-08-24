@@ -25,8 +25,12 @@ public class UserService implements UserDetailsService {
           return userRepository.findById(id).get();
      }
 
-     public void changeEmail(String email, User user) {
-          userRepository.changeEmail(email, user.getId());
+     public User getUserByEmail(String email) {
+          return userRepository.findByEmailIgnoreCase(email);
+     }
+
+     public void deleteUser(User user) {
+          userRepository.delete(user);
      }
 
      @Override

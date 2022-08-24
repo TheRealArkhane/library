@@ -3,13 +3,11 @@ package com.libtask.library2.services;
 import com.libtask.library2.entities.Book;
 import com.libtask.library2.entities.BookDto;
 import com.libtask.library2.entities.Genre;
-import com.libtask.library2.entities.User;
 import com.libtask.library2.repositories.BookRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,8 +26,12 @@ public class BookService {
         return bookRepository.findById(id).get();
     }
 
-    public List<Book> getBooksOnBalance() {
-        return bookRepository.getBooksOnBalance();
+    public Book getBookByIsbn(String isbn) {
+        return bookRepository.getBookByIsbn(isbn);
+    }
+
+    public List<Book> getBooksInStock() {
+        return bookRepository.getBooksInStock();
     }
 
     public List<Book> getTakenBooksListByUserId(Long userId) {

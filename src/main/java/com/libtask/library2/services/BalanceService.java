@@ -17,14 +17,13 @@ public class BalanceService {
     @NonNull
     private BookRepository bookRepository;
 
-    public User addBookToUserBalance(User user, Book bookToTake) {
+    public void addBookToUserBalance(User user, Book bookToTake) {
         if (!userRepository.existsById(user.getId())
                 || !bookRepository.existsById(bookToTake.getId())
                 || bookRepository.findById(bookToTake.getId()).get().getUserId() != null) {
             throw new IllegalStateException("не соблюдены условия выполнения");
         }
         userRepository.addBookToUserBalance(user.getId(), bookToTake.getId());
-        return user;
     }
 
     public void removeBookFromUserBalance(User user, Book bookToReturn) {

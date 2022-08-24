@@ -11,11 +11,12 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
+    Book getBookByIsbn(String isbn);
     @Query(value = "SELECT * FROM book", nativeQuery = true)
     List<Book> showAllBooks();
 
     @Query(value = "SELECT * FROM book WHERE user_id IS NULL", nativeQuery = true)
-    List<Book> getBooksOnBalance();
+    List<Book> getBooksInStock();
 
     @Query(value = "SELECT * FROM book WHERE user_id = :user_id", nativeQuery = true)
     List<Book> getTakenBooksListByUserId(@Param("user_id") Long userId);

@@ -24,6 +24,11 @@ public class BookController {
         return bookService.showCatalog();
     }
 
+    @GetMapping("/in-stock")
+    public List<Book> getBooksInStock() {
+        return bookService.getBooksInStock();
+    }
+
     @GetMapping("/{id}")
     public Book bookInfo(@PathVariable(value = "id") Long id) {
         return bookService.getBookById(id);

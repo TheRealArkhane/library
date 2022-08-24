@@ -33,6 +33,6 @@ public class Book {
     @Column(name = "genre")
     Genre genre;
     @Column(name = "user_id")
-    Integer userId;
+    Long userId;
 }
 
