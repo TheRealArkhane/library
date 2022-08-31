@@ -1,6 +1,6 @@
 package com.libtask.library2.services;
 
-import com.libtask.library2.entities.RegistrationRequest;
+import com.libtask.library2.dto.RegistrationRequest;
 import com.libtask.library2.entities.Role;
 import com.libtask.library2.entities.User;
 import com.libtask.library2.repositories.UserRepository;
@@ -23,7 +23,7 @@ public class RegistrationService {
                 Role.USER
         );
         if (userRepository.existsByEmailIgnoreCase(newUser.getEmail())) {
-            throw new IllegalStateException("Пользователь с этой почтой уже зарегистрирован");
+            throw new IllegalStateException("User with this email is already signed up");
         }
         signUpUser(newUser);
         return newUser;

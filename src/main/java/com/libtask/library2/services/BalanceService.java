@@ -4,7 +4,6 @@ import com.libtask.library2.entities.Book;
 import com.libtask.library2.entities.User;
 import com.libtask.library2.repositories.BookRepository;
 import com.libtask.library2.repositories.UserRepository;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,26 +11,24 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BalanceService {
 
-    @NonNull
-    private UserRepository userRepository;
-    @NonNull
-    private BookRepository bookRepository;
+    private final UserRepository userRepository;
+    private final BookRepository bookRepository;
 
     public void addBookToUserBalance(User user, Book bookToTake) {
-        if (!userRepository.existsById(user.getId())
-                || !bookRepository.existsById(bookToTake.getId())
-                || bookRepository.findById(bookToTake.getId()).get().getUserId() != null) {
-            throw new IllegalStateException("не соблюдены условия выполнения");
+        User userInDb = userRepository.findById(user.getId()).orElseThrow();
+        Book bookInDb = bookRepository.findById(bookToTake.getId()).orElseThrow();
+        if (bookInDb.getUserId() != null) {
+            throw new IllegalStateException("Book is already taken");
         }
-        userRepository.addBookToUserBalance(user.getId(), bookToTake.getId());
+        else userRepository.addBookToUserBalance(userInDb.getId(), bookInDb.getId());
     }
 
     public void removeBookFromUserBalance(User user, Book bookToReturn) {
-        if (!userRepository.existsById(user.getId())
-                || !bookRepository.existsById(bookToReturn.getId())
-                || bookRepository.findById(bookToReturn.getId()).get().getUserId() == null) {
-            throw new IllegalStateException("не соблюдены условия выполнения");
+        User userInDb = userRepository.findById(user.getId()).orElseThrow();
+        Book bookInDb = bookRepository.findById(bookToReturn.getId()).orElseThrow();
+        if (!bookInDb.getUserId().equals(userInDb.getId())) {
+            throw new IllegalStateException("Book is not on a user's balance");
         }
-        userRepository.removeBookFromUserBalance(user.getId(), bookToReturn.getId());
+        else userRepository.removeBookFromUserBalance(userInDb.getId(), bookInDb.getId());
     }
 }

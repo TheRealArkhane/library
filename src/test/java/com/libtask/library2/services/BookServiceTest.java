@@ -1,13 +1,14 @@
 package com.libtask.library2.services;
 
+import com.libtask.library2.dto.BookDto;
 import com.libtask.library2.entities.Book;
-import com.libtask.library2.entities.BookDto;
 import com.libtask.library2.entities.Genre;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class BookServiceTest {
@@ -27,8 +28,8 @@ class BookServiceTest {
                         Genre.OTHER));
 
         //then
-        assertThat(bookService.showCatalog().contains(bookService.getBookByIsbn(book.getIsbn()))).isTrue();
-        bookService.deleteBook(bookService.getBookByIsbn(book.getIsbn()));
+        assertTrue(bookService.getCatalog().contains(bookService.getBookByIsbn(book.getIsbn())));
+        bookService.deleteBook(bookService.getBookByIsbn(book.getIsbn()).getId());
     }
 
     @Test
@@ -42,9 +43,10 @@ class BookServiceTest {
                         Genre.OTHER));
 
         //when
-        bookService.deleteBook(bookService.getBookByIsbn(book.getIsbn()));
+        Book testBook = bookService.getBookByIsbn(book.getIsbn());
+        bookService.deleteBook(testBook.getId());
 
         //then
-        assertThat(bookService.showCatalog().contains(bookService.getBookByIsbn(book.getIsbn()))).isFalse();
+        assertFalse(bookService.getCatalog().contains(testBook));
     }
 }

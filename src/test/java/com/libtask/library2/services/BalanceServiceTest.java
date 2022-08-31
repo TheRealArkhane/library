@@ -1,5 +1,6 @@
 package com.libtask.library2.services;
 
+import com.libtask.library2.dto.BookDto;
 import com.libtask.library2.entities.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ class BalanceServiceTest {
                 userService.getUserByEmail(user.getEmail()),
                 bookService.getBookByIsbn(book.getIsbn()));
 
-        bookService.deleteBook(bookService.getBookByIsbn(book.getIsbn()));
+        bookService.deleteBook(bookService.getBookByIsbn(book.getIsbn()).getId());
         userService.deleteUser(userService.getUserByEmail(user.getEmail()));
     }
 
@@ -82,7 +83,7 @@ class BalanceServiceTest {
         //then
         assertThat(bookService.getBookByIsbn(book.getIsbn()).getUserId() == null).isTrue();
 
-        bookService.deleteBook(bookService.getBookByIsbn(book.getIsbn()));
+        bookService.deleteBook(bookService.getBookByIsbn(book.getIsbn()).getId());
         userService.deleteUser(userService.getUserByEmail(user.getEmail()));
     }
 }

@@ -1,16 +1,18 @@
 package com.libtask.library2.services;
 
 import com.libtask.library2.entities.Book;
-import com.libtask.library2.entities.BookDto;
+import com.libtask.library2.dto.BookDto;
 import com.libtask.library2.entities.Genre;
 import com.libtask.library2.repositories.BookRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,24 +20,32 @@ public class BookService {
 
     @NonNull
     private final BookRepository bookRepository;
-    public List<Book> showCatalog() {
-        return bookRepository.showAllBooks();
+    public List<Book> getCatalog() {
+        return bookRepository.getAllBooks();
+    }
+
+    public BookDto bookToBookDto(Book book) {
+        return new BookDto(
+                book.getIsbn(),
+                book.getName(),
+                book.getAuthor(),
+                book.getGenre());
     }
 
     public Book getBookById(Long id) {
-        return bookRepository.findById(id).get();
+        return bookRepository.findById(id).orElseThrow();
     }
 
     public Book getBookByIsbn(String isbn) {
-        return bookRepository.getBookByIsbn(isbn);
+        return bookRepository.getBookByIsbn(isbn).orElseThrow();
     }
 
-    public List<Book> getBooksInStock() {
-        return bookRepository.getBooksInStock();
+    public List<Book> getFreeBooks() {
+        return bookRepository.findFreeBooks();
     }
 
-    public List<Book> getTakenBooksListByUserId(Long userId) {
-        return bookRepository.getTakenBooksListByUserId(userId);
+    public List<Book> getTakenBooksByUserId(Long userId) {
+        return bookRepository.findTakenBooksByUserId(userId);
     }
 
     public Book addBook(BookDto bookDto) {
@@ -48,58 +58,24 @@ public class BookService {
         return newBook;
     }
 
-    public void deleteBook(Book book) {
+    public void deleteBook(Long id) {
+        Book book = getBookById(id);
         if (book.getUserId() != null) {
-            throw new RuntimeException("Невозможно удалить взятую книгу");
+            throw new RuntimeException("Can't delete book that already taken");
         }
         bookRepository.delete(book);
     }
 
-    public static List<Book> sortByAuthor(List<Book> bookList, String author) {
-        return bookList.stream()
-                .filter(book -> book.getAuthor().equalsIgnoreCase(author))
-                .collect(Collectors.toList());
-        // instead of .equalsIgnoreCase(...) can there be .contains(CharSequence ...)?
+    public List<Book> getCatalogSortedByName() {
+        return bookRepository.getCatalogSortedByName();
     }
 
-    public List<Book> sortByName(List<Book> bookList, String name) {
-        return bookList.stream()
-                .filter(book -> book.getName().equalsIgnoreCase(name))
-                .collect(Collectors.toList());
-        // instead of .equalsIgnoreCase(...) can there be .contains(CharSequence ...)?
+    public List<Book> getCatalogSortedByAuthor() {
+        return bookRepository.getCatalogSortedByAuthor();
     }
 
-    public List<Book> sortByGenre(List<Book> bookList, Genre genre) {
-        return bookList.stream()
-                .filter(book -> book.getGenre().equals(genre))
-                .collect(Collectors.toList());
-        // instead of .equalsIgnoreCase(...) can there be .contains(CharSequence ...)?
+    public List<Book> getCatalogSortedByGenre() {
+        return bookRepository.getCatalogSortedByGenre();
     }
 
-    //собственное решение
-    public List<List<Book>> pagination(List<Book> bookList, int pageValue) {
-        List<List<Book>> pagesList = new ArrayList<>();
-        int size = bookList.size();
-        for (int i = 0; i <= bookList.size() / pageValue; i++) {
-            if (size >= pageValue) {
-                List<Book> pageList = bookList.subList(i * pageValue,(i * pageValue) + pageValue - 1);
-                pagesList.add(pageList);
-                size -= pageValue;
-            }
-            else {
-                List<Book> pageList = bookList.subList(i * pageValue, bookList.size() - 1);
-                pagesList.add(pageList);
-            }
-        }
-        return pagesList;
-    }
-
-    //найденное решение
-    public List<List<Book>> newPagination(List<Book> bookList, int pageValue) {
-        List<List<Book>> pagesList = new ArrayList<>();
-        for (int i = 0; i < bookList.size(); i += pageValue) {
-            pagesList.add(bookList.subList(i, Math.min(i + pageValue, bookList.size())));
-        }
-        return pagesList;
-    }
 }

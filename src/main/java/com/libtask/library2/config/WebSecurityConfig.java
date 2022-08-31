@@ -17,7 +17,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    @Configuration
+    public static class PasswordEncoder {
+
+        @Bean
+        public static BCryptPasswordEncoder passwordEncoder() {
+            return new BCryptPasswordEncoder();
+        }
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -26,8 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/",
                         "/registration",
-                        "/books/**",
-                        "/books/in-stock")
+                        "/books/catalog/**",
+                        "/books/free")
                 .permitAll()
                 .anyRequest()
                 .authenticated().and()
@@ -43,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider =
                 new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(bCryptPasswordEncoder);
+        provider.setPasswordEncoder(passwordEncoder);
         provider.setUserDetailsService(userService);
         return provider;
     }
