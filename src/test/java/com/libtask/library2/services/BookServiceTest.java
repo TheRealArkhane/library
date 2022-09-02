@@ -1,52 +1,55 @@
 package com.libtask.library2.services;
 
-import com.libtask.library2.dto.BookDto;
-import com.libtask.library2.entities.Book;
-import com.libtask.library2.entities.Genre;
+import com.libtask.library2.entities.User;
+import com.libtask.library2.repositories.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class BookServiceTest {
 
     @Autowired
     BookService bookService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    BookRepository bookRepository;
 
 
     @Test
-    void itShouldAddBookToDb() {
-        //when
-        Book book = bookService.addBook(
-                new BookDto(
-                        "Test",
-                        "Test",
-                        "Test",
-                        Genre.OTHER));
+    void itShouldGetCatalog() {
 
-        //then
-        assertTrue(bookService.getCatalog().contains(bookService.getBookByIsbn(book.getIsbn())));
-        bookService.deleteBook(bookService.getBookByIsbn(book.getIsbn()).getId());
+        assertEquals(
+                bookRepository.findAll(Pageable.unpaged()),
+                bookService.getCatalog(Pageable.unpaged()));
     }
 
     @Test
-    void itShouldDeleteBookFromDb() {
-        //given
-        Book book = bookService.addBook(
-                new BookDto(
-                        "Test",
-                        "Test",
-                        "Test",
-                        Genre.OTHER));
+    void itShouldGetBookById() {
 
-        //when
-        Book testBook = bookService.getBookByIsbn(book.getIsbn());
-        bookService.deleteBook(testBook.getId());
+        assertEquals(
+                bookService.getBookById(1L),
+                bookRepository.findById(1L).orElseThrow());
+    }
 
-        //then
-        assertFalse(bookService.getCatalog().contains(testBook));
+    @Test
+    void itShouldGetFreeBooks() {
+
+        assertEquals(
+                bookService.getFreeBooks(Pageable.unpaged()),
+                bookRepository.findFreeBooks(Pageable.unpaged()));
+    }
+
+    @Test
+    void itShouldGetTakenBooksByUserId() {
+
+        User user = userService.getUserById(1L);
+        assertEquals(
+                bookService.getTakenBooksByUserId(user.getId(), Pageable.unpaged()),
+                bookRepository.findTakenBooksByUserId(user.getId(), Pageable.unpaged()));
     }
 }

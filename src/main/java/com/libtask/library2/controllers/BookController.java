@@ -4,9 +4,10 @@ import com.libtask.library2.entities.Book;
 import com.libtask.library2.dto.BookDto;
 import com.libtask.library2.services.BookService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -20,28 +21,28 @@ public class BookController {
     }
 
     @GetMapping("/catalog")
-    public List<Book> getCatalog() {
-        return bookService.getCatalog();
+    public Page<Book> getCatalog(@PageableDefault(sort = "id", size = 5) Pageable page) {
+        return bookService.getCatalog(page);
     }
 
     @GetMapping("/catalog/sorted-by-name")
-    public List<Book> getCatalogSortedByName() {
-        return bookService.getCatalogSortedByName();
+    public Page<Book> getCatalogSortedByName(@PageableDefault(sort = "name", size = 5) Pageable page) {
+        return bookService.getCatalog(page);
     }
 
     @GetMapping("/catalog/sorted-by-author")
-    public List<Book> getCatalogSortedByAuthor() {
-        return bookService.getCatalogSortedByAuthor();
+    public Page<Book> getCatalogSortedByAuthor(@PageableDefault(sort = "author", size = 5) Pageable page) {
+        return bookService.getCatalog(page);
     }
 
     @GetMapping("/catalog/sorted-by-genre")
-    public List<Book> getCatalogSortedByGenre() {
-        return bookService.getCatalogSortedByGenre();
+    public Page<Book> getCatalogSortedByGenre(@PageableDefault(sort = "genre", size = 5) Pageable page) {
+        return bookService.getCatalog(page);
     }
 
     @GetMapping("/free")
-    public List<Book> getFreeBooks() {
-        return bookService.getFreeBooks();
+    public Page<Book> getFreeBooks(@PageableDefault(sort = "id", size = 5) Pageable page) {
+        return bookService.getFreeBooks(page);
     }
 
     @GetMapping("/{id}")

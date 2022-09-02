@@ -6,6 +6,9 @@ import com.libtask.library2.dto.UserDto;
 import com.libtask.library2.services.BookService;
 import com.libtask.library2.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +22,8 @@ public class UserController {
     private final BookService bookService;
 
     @GetMapping("/all")
-    public List<User> showAllUsers() {
-        return userService.showAllUsers();
+    public Page<User> showAllUsers(@PageableDefault(sort = "id", size = 2) Pageable page) {
+        return userService.showAllUsers(page);
     }
 
     @GetMapping("/{id}")
@@ -29,9 +32,10 @@ public class UserController {
     }
 
     @GetMapping("/{id}/balance")
-    public List<Book> showUserBalance(@PathVariable(value = "id") Long id) {
-        return bookService.getTakenBooksByUserId(id);
+    public Page<Book> showUserBalance(
+            @PathVariable(value = "id") Long id,
+            @PageableDefault(sort = "id", size = 2) Pageable page) {
+        return bookService.getTakenBooksByUserId(id, page);
     }
-
 }
 

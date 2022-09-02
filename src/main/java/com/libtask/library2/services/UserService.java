@@ -1,16 +1,15 @@
 package com.libtask.library2.services;
 
-import com.libtask.library2.entities.User;
 import com.libtask.library2.dto.UserDto;
+import com.libtask.library2.entities.User;
 import com.libtask.library2.repositories.UserRepository;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +24,8 @@ public class UserService implements UserDetailsService {
                   user.getEmail());
      }
 
-     public List<User> showAllUsers() {
-          return userRepository.showAllUsers();
+     public Page<User> showAllUsers(Pageable page) {
+          return userRepository.findAll(page);
      }
 
      public User getUserById(Long id) {

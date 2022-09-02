@@ -1,18 +1,13 @@
 package com.libtask.library2.services;
 
-import com.libtask.library2.entities.Book;
 import com.libtask.library2.dto.BookDto;
-import com.libtask.library2.entities.Genre;
+import com.libtask.library2.entities.Book;
 import com.libtask.library2.repositories.BookRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.awt.print.Pageable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,9 +15,6 @@ public class BookService {
 
     @NonNull
     private final BookRepository bookRepository;
-    public List<Book> getCatalog() {
-        return bookRepository.getAllBooks();
-    }
 
     public BookDto bookToBookDto(Book book) {
         return new BookDto(
@@ -32,6 +24,9 @@ public class BookService {
                 book.getGenre());
     }
 
+    public Page<Book> getCatalog(Pageable page) {
+        return bookRepository.findAll(page);
+    }
     public Book getBookById(Long id) {
         return bookRepository.findById(id).orElseThrow();
     }
@@ -40,12 +35,12 @@ public class BookService {
         return bookRepository.getBookByIsbn(isbn).orElseThrow();
     }
 
-    public List<Book> getFreeBooks() {
-        return bookRepository.findFreeBooks();
+    public Page<Book> getFreeBooks(Pageable page) {
+        return bookRepository.findFreeBooks(page);
     }
 
-    public List<Book> getTakenBooksByUserId(Long userId) {
-        return bookRepository.findTakenBooksByUserId(userId);
+    public Page<Book> getTakenBooksByUserId(Long userId, Pageable page) {
+        return bookRepository.findTakenBooksByUserId(userId, page);
     }
 
     public Book addBook(BookDto bookDto) {
@@ -65,17 +60,4 @@ public class BookService {
         }
         bookRepository.delete(book);
     }
-
-    public List<Book> getCatalogSortedByName() {
-        return bookRepository.getCatalogSortedByName();
-    }
-
-    public List<Book> getCatalogSortedByAuthor() {
-        return bookRepository.getCatalogSortedByAuthor();
-    }
-
-    public List<Book> getCatalogSortedByGenre() {
-        return bookRepository.getCatalogSortedByGenre();
-    }
-
 }

@@ -1,11 +1,14 @@
 package com.libtask.library2.services;
 
 import com.libtask.library2.dto.RegistrationRequest;
+import com.libtask.library2.repositories.UserRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class RegistrationServiceTest {
@@ -14,21 +17,30 @@ class RegistrationServiceTest {
     RegistrationService registrationService;
     @Autowired
     UserService userService;
+    @Autowired
+    UserRepository userRepository;
+    RegistrationRequest request;
 
-    @Test
-    void itShouldRegisterNewUser() {
-        //given
-        RegistrationRequest request = new RegistrationRequest(
+    @BeforeEach
+    public void initializeRequest() {
+
+        request = new RegistrationRequest(
                 "Test",
                 "Test",
                 "Test",
                 "Test");
+    }
 
-        //when
+    @Test
+    void itShouldRegisterNewUser() {
+
         registrationService.register(request);
+        assertTrue(userRepository.findAll().contains(userService.getUserByEmail("Test")));
+    }
 
-        //then
-        assertThat(userService.showAllUsers().contains(userService.getUserByEmail("Test"))).isTrue();
-        userService.deleteUser(userService.getUserByEmail("Test"));
+    @AfterEach
+    public void deleteUser() {
+
+        userRepository.delete(userService.getUserByEmail("Test"));
     }
 }
