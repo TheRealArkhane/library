@@ -1,18 +1,26 @@
 package com.libtask.library2.dto;
 
+import com.libtask.library2.entities.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.jetbrains.annotations.NotNull;
+
 @Getter
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserDto {
 
     @NonNull
-    String firstName;
+    private final String firstName;
     @NonNull
-    String lastName;
+    private final String lastName;
     @NonNull
-    String email;
+    private final String email;
+
+    public UserDto(@NotNull User user) {
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+    }
 }

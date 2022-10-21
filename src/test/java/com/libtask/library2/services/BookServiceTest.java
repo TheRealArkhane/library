@@ -1,16 +1,14 @@
 package com.libtask.library2.services;
 
+import com.libtask.library2.Library2ApplicationTests;
 import com.libtask.library2.entities.User;
 import com.libtask.library2.repositories.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-class BookServiceTest {
+class BookServiceTest extends Library2ApplicationTests {
 
     @Autowired
     BookService bookService;
@@ -20,6 +18,7 @@ class BookServiceTest {
     BookRepository bookRepository;
 
 
+    /*
     @Test
     void itShouldGetCatalog() {
 
@@ -52,4 +51,5 @@ class BookServiceTest {
                 bookService.getTakenBooksByUserId(user.getId(), Pageable.unpaged()),
                 bookRepository.findTakenBooksByUserId(user.getId(), Pageable.unpaged()));
     }
+     */
 }

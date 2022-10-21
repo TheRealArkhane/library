@@ -19,25 +19,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    @Configuration
-    public static class PasswordEncoder {
-
-        @Bean
-        public static BCryptPasswordEncoder passwordEncoder() {
-            return new BCryptPasswordEncoder();
-        }
-    }
+    
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/",
+                .antMatchers(
+                        "/",
                         "/registration",
-                        "/books/catalog/**",
-                        "/books/free",
-                        "/books/{id}")
+                        "/books/catalog",
+                        "/books/catalog-free")
                 .permitAll()
                 .anyRequest()
                 .authenticated().and()
@@ -56,5 +49,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setPasswordEncoder(passwordEncoder);
         provider.setUserDetailsService(userService);
         return provider;
+    }
+
+    @Configuration
+    public static class PasswordEncoder {
+
+        @Bean
+        public BCryptPasswordEncoder passwordEncoder() {
+            return new BCryptPasswordEncoder();
+        }
     }
 }

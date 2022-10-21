@@ -1,17 +1,17 @@
 package com.libtask.library2.services;
 
+import com.libtask.library2.Library2ApplicationTests;
 import com.libtask.library2.dto.RegistrationRequest;
 import com.libtask.library2.repositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
-class RegistrationServiceTest {
+
+class RegistrationServiceTest extends Library2ApplicationTests {
 
     @Autowired
     RegistrationService registrationService;
@@ -20,6 +20,8 @@ class RegistrationServiceTest {
     @Autowired
     UserRepository userRepository;
     RegistrationRequest request;
+
+    /*
 
     @BeforeEach
     public void initializeRequest() {
@@ -43,4 +45,5 @@ class RegistrationServiceTest {
 
         userRepository.delete(userService.getUserByEmail("Test"));
     }
+     */
 }

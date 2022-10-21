@@ -1,8 +1,9 @@
 package com.libtask.library2.dto;
 
+import com.libtask.library2.entities.Book;
 import com.libtask.library2.entities.Genre;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,16 +12,22 @@ import javax.persistence.Enumerated;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookDto {
-
     @NonNull
-    final String isbn;
+    private final String isbn;
     @NonNull
-    final String name;
+    private final String name;
     @NonNull
-    final String author;
+    private final String author;
     @NonNull
     @Enumerated(EnumType.STRING)
-    final Genre genre;
+    private final Genre genre;
+
+    public BookDto(@NotNull Book book) {
+        this.isbn = book.getIsbn();
+        this.name = book.getName();
+        this.author = book.getAuthor();
+        this.genre = book.getGenre();
+    }
+
 }

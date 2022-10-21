@@ -1,5 +1,6 @@
 package com.libtask.library2.services;
 
+import com.libtask.library2.Library2ApplicationTests;
 import com.libtask.library2.dto.BookDto;
 import com.libtask.library2.entities.Book;
 import com.libtask.library2.entities.Genre;
@@ -9,13 +10,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@SpringBootTest
-class BalanceServiceTest {
+
+class BalanceServiceTest extends Library2ApplicationTests {
 
     @Autowired
     BalanceService balanceService;
@@ -28,6 +27,8 @@ class BalanceServiceTest {
 
     User user;
     Book book;
+
+    /*
 
     @BeforeEach
     public void initializeTestingObjectsAndTakeBookToUserBalance() {
@@ -81,4 +82,6 @@ class BalanceServiceTest {
         bookService.deleteBook(bookService.getBookByIsbn(book.getIsbn()).getId());
         userService.deleteUser(userService.getUserByEmail(user.getEmail()));
     }
+
+     */
 }

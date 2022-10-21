@@ -16,11 +16,10 @@ public class GenreConverter implements AttributeConverter<Genre, String> {
     }
 
     @Override
-    public Genre convertToEntityAttribute(String genre) {
+    public Genre convertToEntityAttribute(String genre) throws IllegalArgumentException {
         if (genre == null) {
             return null;
         }
-
         return Stream.of(Genre.values())
                 .filter(c -> c.getName().equals(genre))
                 .findFirst()

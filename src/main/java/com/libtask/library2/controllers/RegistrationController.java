@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(path = "/registration")
 public class RegistrationController {
 
     private final RegistrationService registrationService;
 
-    @GetMapping(path = "/registration")
+    @GetMapping
     public void register() {
     }
 
-    @PostMapping(path = "/registration")
+    @PostMapping
     public Long register(@RequestBody RegistrationRequest request) {
        return registrationService.register(request).getId();
     }
-
 }
