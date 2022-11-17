@@ -31,7 +31,7 @@ public class BookController {
 
     @GetMapping("/all/sorted/{criterion}")
     public Page<Book> getCatalogSortedByCriterion(@PathVariable String criterion, Pageable page) {
-        return bookService.findBooksSortedByCriterion(criterion, page);
+        return bookService.getBooksSortedByCriterion(criterion, page);
     }
 
     @GetMapping("/free")

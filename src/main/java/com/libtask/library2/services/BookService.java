@@ -18,11 +18,6 @@ public class BookService {
     @NonNull
     private final BookRepository bookRepository;
 
-    public Book getBookByIsbn(String isbn) throws IllegalArgumentException {
-        return bookRepository.getBookByIsbn(isbn)
-                .orElseThrow(() -> new IllegalArgumentException("Book with this ISBN is not exist"));
-    }
-
     public Book addBook(BookDto bookDto) {
         Book newBook = new Book(
                 bookDto.getIsbn(),
@@ -33,7 +28,7 @@ public class BookService {
         return newBook;
     }
 
-    public Page<Book> findBooksSortedByCriterion(String criterion, Pageable page) {
+    public Page<Book> getBooksSortedByCriterion(String criterion, Pageable page) {
         Pageable paging = PageRequest.of(
                 page.getPageNumber(),
                 page.getPageSize(),

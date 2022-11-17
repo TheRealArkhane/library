@@ -2,86 +2,85 @@ package com.libtask.library2.services;
 
 import com.libtask.library2.Library2ApplicationTests;
 import com.libtask.library2.dto.BookDto;
-import com.libtask.library2.entities.Book;
+import com.libtask.library2.dto.RegistrationRequest;
 import com.libtask.library2.entities.Genre;
-import com.libtask.library2.entities.Role;
-import com.libtask.library2.entities.User;
+import com.libtask.library2.repositories.BookRepository;
+import com.libtask.library2.repositories.UserRepository;
+import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 
-class BalanceServiceTest extends Library2ApplicationTests {
+public class BalanceServiceTest extends Library2ApplicationTests {
 
     @Autowired
     BalanceService balanceService;
     @Autowired
-    UserService userService;
+    BookRepository bookRepository;
+    @Autowired
+    UserRepository userRepository;
     @Autowired
     RegistrationService registrationService;
     @Autowired
     BookService bookService;
 
-    User user;
-    Book book;
-
-    /*
+    private Long testBookId;
+    private Long testUserId;
 
     @BeforeEach
-    public void initializeTestingObjectsAndTakeBookToUserBalance() {
-
-        user = new User(
-                "Test",
-                "Test",
-                "Test",
-                "test",
-                Role.USER);
-        registrationService.signUpUser(user);
-
-        book = bookService.addBook(
+    void createTestBookAndTestUser() {
+        testBookId = bookService.addBook(
                 new BookDto(
-                        "Test",
-                        "Test",
-                        "Test",
-                        Genre.OTHER));
+                        "test",
+                        "test",
+                        "test",
+                        Genre.OTHER
+                        )).getId();
 
-        balanceService.addBookToUserBalance(
-                userService.getUserByEmail(user.getEmail()),
-                bookService.getBookByIsbn(book.getIsbn()));
+        testUserId = registrationService.register(
+                new RegistrationRequest(
+                        "test",
+                        "test",
+                        "test",
+                        "test"
+                )).getId();
+    }
+
+    @Disabled
+    @Test
+    void contextLoads() {
     }
 
     @Test
     void itShouldAddBookToUserBalance() {
-
+        balanceService.addBookToUserBalance(testUserId, testBookId);
         assertEquals(
-                bookService.getBookByIsbn(book.getIsbn()).getUserId(),
-                userService.getUserByEmail(user.getEmail()).getId());
+                testUserId,
+                bookRepository.findById(
+                        testBookId).orElseThrow(
+                                () ->new IllegalArgumentException("Book with this ISBN is not exist")).getUserId());
     }
 
     @Test
     void itShouldRemoveBookFromUserBalance() {
-
-        balanceService.removeBookFromUserBalance(
-                userService.getUserByEmail(user.getEmail()),
-                bookService.getBookByIsbn(book.getIsbn()));
-
-        assertNull(bookService.getBookByIsbn(book.getIsbn()).getUserId());
+        balanceService.addBookToUserBalance(testUserId, testBookId);
+        balanceService.removeBookFromUserBalance(testUserId, testBookId);
+        assertNull(bookRepository.findById(
+                testBookId).orElseThrow(
+                () ->new IllegalArgumentException("Book with this ID is not exist")).getUserId());
     }
 
     @AfterEach
-    public void deleteTestingObjects() {
-
-        if (bookService.getBookByIsbn(book.getIsbn()).getUserId() != null) {
-        balanceService.removeBookFromUserBalance(
-                userService.getUserByEmail(user.getEmail()),
-                bookService.getBookByIsbn(book.getIsbn()));
-        }
-        bookService.deleteBook(bookService.getBookByIsbn(book.getIsbn()).getId());
-        userService.deleteUser(userService.getUserByEmail(user.getEmail()));
+    void deleteTestBookAndTestUser() {
+        bookRepository.delete(bookRepository.findById(testBookId).orElseThrow(
+                () ->new IllegalArgumentException("Book with this ID is not exist")));
+        userRepository.delete(userRepository.findById(testUserId).orElseThrow(
+                () ->new IllegalArgumentException("User with this ID is not exist")));
     }
-
-     */
 }
