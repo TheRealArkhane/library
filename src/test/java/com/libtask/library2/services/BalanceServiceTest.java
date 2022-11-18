@@ -6,7 +6,6 @@ import com.libtask.library2.dto.RegistrationRequest;
 import com.libtask.library2.entities.Genre;
 import com.libtask.library2.repositories.BookRepository;
 import com.libtask.library2.repositories.UserRepository;
-import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

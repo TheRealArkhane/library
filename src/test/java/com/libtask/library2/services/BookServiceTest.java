@@ -38,12 +38,4 @@ public class BookServiceTest extends Library2ApplicationTests {
         assertTrue(bookRepository.existsById(testBook.getId()));
         bookRepository.delete(testBook);
     }
-
-    @Test
-    void itShouldGetBooksSortedByCriterion() {
-        assertEquals(
-                bookRepository.findAll(Sort.by("name")),
-                bookService.getBooksSortedByCriterion(
-                        "name", PageRequest.ofSize((int) bookRepository.count())).getContent());
-    }
 }

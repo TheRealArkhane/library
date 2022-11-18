@@ -3,7 +3,7 @@ package com.libtask.library2.dto;
 import com.libtask.library2.entities.Book;
 import com.libtask.library2.entities.Genre;
 import lombok.*;
-import org.jetbrains.annotations.NotNull;
+
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -23,7 +23,7 @@ public class BookDto {
     @Enumerated(EnumType.STRING)
     private final Genre genre;
 
-    public BookDto(@NotNull Book book) {
+    public BookDto(@NonNull Book book) {
         this.isbn = book.getIsbn();
         this.name = book.getName();
         this.author = book.getAuthor();

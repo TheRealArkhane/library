@@ -29,11 +29,6 @@ public class BookController {
         return bookRepository.findAll(page);
     }
 
-    @GetMapping("/all/sorted/{criterion}")
-    public Page<Book> getCatalogSortedByCriterion(@PathVariable String criterion, Pageable page) {
-        return bookService.getBooksSortedByCriterion(criterion, page);
-    }
-
     @GetMapping("/free")
     public Page<Book> getFreeBooks(@PageableDefault(sort = "id") Pageable page) {
         return bookRepository.findFreeBooks(page);

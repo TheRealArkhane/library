@@ -137,17 +137,8 @@ function getBalance(pageNumber, sortingField, sortingDirection) {
 
     function fetchData() {
         $.ajax({
-            url: "http://localhost:8080/balance/user"
-                + "?page=" + pageNumber
-                + "&size=" + pageSize
-                + "&sort=" + sortingField
-                + "&sortingDirection="
-                + sortingDirection,
+            url: `http://localhost:8080/balance/user?page=${pageNumber}&size=${pageSize}&sort=${sortingField}&sortingDirection=${sortingDirection}`,
             type: "GET",
-            data:
-                {
-                    userId: currentUserId //не работает - он не хочет воспринимать переменную
-                },
             success:
             function (data) {
                 console.log(data);

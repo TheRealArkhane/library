@@ -27,12 +27,4 @@ public class BookService {
         bookRepository.save(newBook);
         return newBook;
     }
-
-    public Page<Book> getBooksSortedByCriterion(String criterion, Pageable page) {
-        Pageable paging = PageRequest.of(
-                page.getPageNumber(),
-                page.getPageSize(),
-                Sort.by(criterion));
-        return bookRepository.findAll(paging);
-    }
 }
