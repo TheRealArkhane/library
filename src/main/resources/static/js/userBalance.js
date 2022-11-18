@@ -1,10 +1,17 @@
 let defaultPageNumber = 0, defaultSortingField = 'id', defaultSortingDirection = 'ASC', pageSize = 10;
 let previousPage, nextPage;
 let currentBookId, currentSortingField;
-let currentUserId = $.get("http://localhost:8080/users/current", function (user) {
-    console.log(user);
-    currentUserId = user.id;
-});
+let currentUserId;
+
+function getCurrentUser() {
+    $.get("http://localhost:8080/users/current", function (response) {
+        console.log(response);
+        currentUserId = response.id;
+        console.log(currentUserId)
+    });
+}
+getCurrentUser();
+
 
 function balanceActionButton(user,currentUser) {
     let takeButton="<button type='button' class='take-button'> Take </button>";
@@ -24,7 +31,7 @@ $(document).on('click', 'th', function() {
     if (currentSortingField === "condition") {
         currentSortingField = "userId";
     }
-    getBooks(null, currentSortingField, null);
+    getBalance(null, currentSortingField, null);
 });
 
 $(document).on('click', '.take-button', function () {
@@ -38,7 +45,7 @@ $(document).on('click', '.take-button', function () {
         },
         success: function (data) {
             console.log(data)
-            getBooks();
+            getBalance();
         }
     });
 });
@@ -46,21 +53,21 @@ $(document).on('click', '.take-button', function () {
 $(document).on('click', '.book-row-name', function () {
     currentBookId = $(this).closest('tr').find('.book-row-id').text().toString();
     if (confirm("Delete this book?")) {
-    $.ajax({
-        url: "http://localhost:8080/books/" + currentBookId,
-        type: "DELETE",
-        data: {
-            id: currentBookId
-        },
-        success: function () {
+        $.ajax({
+            url: "http://localhost:8080/books/" + currentBookId,
+            type: "DELETE",
+            data: {
+                id: currentBookId
+            },
+            success: function () {
                 alert("Book successfully deleted");
-                getBooks();
-        },
-        error: function(){
-            alert("Can't delete the book that already taken");
-            getBooks();
-        }
-    })
+                getBalance();
+            },
+            error: function(){
+                alert("Can't delete the book that already taken");
+                getBalance();
+            }
+        })
     }
 });
 
@@ -75,12 +82,12 @@ $(document).on('click', '.return-button', function () {
         },
         success: function (data) {
             console.log(data)
-            getBooks();
+            getBalance();
         }
     });
 });
 
-function getBooks(pageNumber, sortingField, sortingDirection) {
+function getBalance(pageNumber, sortingField, sortingDirection) {
 
     if (pageNumber == null) {
         pageNumber = defaultPageNumber;
@@ -104,24 +111,24 @@ function getBooks(pageNumber, sortingField, sortingDirection) {
         }
         if (currentPage === totalPages - 1) {
             document.getElementById("pageable_div_id").innerHTML =
-                '<button onclick="getBooks(\'' + previousPage + '\',' +
+                '<button onclick="getBalance(\'' + previousPage + '\',' +
                 '\'' + sortingField + '\',' +
                 '\'' + sortingDirection + '\')">Previous</button>' +
                 ' ' + totalElements + ' of ' + totalElements;
         }
         else if (currentPage === 0) {
             document.getElementById("pageable_div_id").innerHTML =
-                '<button onclick="getBooks(\'' + nextPage + '\',' +
+                '<button onclick="getBalance(\'' + nextPage + '\',' +
                 '\'' + sortingField + '\',' +
                 '\'' + sortingDirection + '\')">Next</button>' +
                 ' ' + (pageSize * (currentPage + 1)) + ' of ' + totalElements;
         }
         else {
             document.getElementById("pageable_div_id").innerHTML =
-                '<button onclick="getBooks(\'' + previousPage + '\',' +
+                '<button onclick="getBalance(\'' + previousPage + '\',' +
                 '\'' + sortingField + '\',' +
                 '\'' + sortingDirection + '\')">Previous</button>' +
-                '<button onclick="getBooks(\'' + nextPage + '\',' +
+                '<button onclick="getBalance(\'' + nextPage + '\',' +
                 '\'' + sortingField + '\',' +
                 '\'' + sortingDirection + '\')">Next</button>' +
                 ' ' + (pageSize * (currentPage + 1)) + ' of ' + totalElements;
@@ -129,14 +136,21 @@ function getBooks(pageNumber, sortingField, sortingDirection) {
     }
 
     function fetchData() {
-        $.get(
-            "http://localhost:8080/books/all?page=" + pageNumber
-            + "&size=" + pageSize
-            + "&sort=" + sortingField
-            + "&sortingDirection=" + sortingDirection,
+        $.ajax({
+            url: "http://localhost:8080/balance/user"
+                + "?page=" + pageNumber
+                + "&size=" + pageSize
+                + "&sort=" + sortingField
+                + "&sortingDirection="
+                + sortingDirection,
+            type: "GET",
+            data:
+                {
+                    userId: currentUserId //не работает - он не хочет воспринимать переменную
+                },
+            success:
             function (data) {
                 console.log(data);
-
                 let html = '<tr>\n' +
                     '        <th class="book-column-id">ID</th>\n' +
                     '        <th class="book-column-isbn">ISBN</th>\n' +
@@ -154,6 +168,7 @@ function getBooks(pageNumber, sortingField, sortingDirection) {
                     } else if (condition === currentUserId) {
                         condition = "Taken By You"
                     } else condition = "Taken";
+
                     html = html + '<tr>\n' +
                         '        <td class="book-row-id">' + data.content[i].id + '</td>\n' +
                         '        <td class="book-row-isbn">' + data.content[i].isbn + '</td>\n' +
@@ -164,11 +179,11 @@ function getBooks(pageNumber, sortingField, sortingDirection) {
                         '        <td>' + balanceActionButton(data.content[i].userId, currentUserId) + '</td>\n' +
                         '    </tr>';
                 }
-                document.getElementById("books_table").innerHTML = html;
+                document.getElementById("balance_table").innerHTML = html;
                 displayPageable(data.pageable, data.totalElements, data.totalPages);
-            });
+            }
+    });
     }
     fetchData();
 }
-
-getBooks();
+getBalance();

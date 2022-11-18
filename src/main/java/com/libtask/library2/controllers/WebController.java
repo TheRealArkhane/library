@@ -26,4 +26,9 @@ public class WebController {
         return "balance";
     }
 
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
+
 }

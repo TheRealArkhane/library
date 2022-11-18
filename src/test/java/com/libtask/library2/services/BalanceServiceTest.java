@@ -64,7 +64,7 @@ public class BalanceServiceTest extends Library2ApplicationTests {
                 testUserId,
                 bookRepository.findById(
                         testBookId).orElseThrow(
-                                () ->new IllegalArgumentException("Book with this ISBN is not exist")).getUserId());
+                                () ->new IllegalArgumentException("Book with this ID is not exist")).getUserId());
     }
 
     @Test

@@ -24,7 +24,7 @@ $(document).on('click', 'th', function() {
     if (currentSortingField === "condition") {
         currentSortingField = "userId";
     }
-    getBooks(null, currentSortingField, null);
+    getFreeBooks(null, currentSortingField, null);
 });
 
 $(document).on('click', '.take-button', function () {
@@ -38,7 +38,7 @@ $(document).on('click', '.take-button', function () {
         },
         success: function (data) {
             console.log(data)
-            getBooks();
+            getFreeBooks();
         }
     });
 });
@@ -46,21 +46,21 @@ $(document).on('click', '.take-button', function () {
 $(document).on('click', '.book-row-name', function () {
     currentBookId = $(this).closest('tr').find('.book-row-id').text().toString();
     if (confirm("Delete this book?")) {
-    $.ajax({
-        url: "http://localhost:8080/books/" + currentBookId,
-        type: "DELETE",
-        data: {
-            id: currentBookId
-        },
-        success: function () {
+        $.ajax({
+            url: "http://localhost:8080/books/" + currentBookId,
+            type: "DELETE",
+            data: {
+                id: currentBookId
+            },
+            success: function () {
                 alert("Book successfully deleted");
-                getBooks();
-        },
-        error: function(){
-            alert("Can't delete the book that already taken");
-            getBooks();
-        }
-    })
+                getFreeBooks();
+            },
+            error: function(){
+                alert("Can't delete the book that already taken");
+                getFreeBooks();
+            }
+        })
     }
 });
 
@@ -75,12 +75,12 @@ $(document).on('click', '.return-button', function () {
         },
         success: function (data) {
             console.log(data)
-            getBooks();
+            getFreeBooks();
         }
     });
 });
 
-function getBooks(pageNumber, sortingField, sortingDirection) {
+function getFreeBooks(pageNumber, sortingField, sortingDirection) {
 
     if (pageNumber == null) {
         pageNumber = defaultPageNumber;
@@ -104,24 +104,23 @@ function getBooks(pageNumber, sortingField, sortingDirection) {
         }
         if (currentPage === totalPages - 1) {
             document.getElementById("pageable_div_id").innerHTML =
-                '<button onclick="getBooks(\'' + previousPage + '\',' +
+                '<button onclick="getFreeBooks(\'' + previousPage + '\',' +
                 '\'' + sortingField + '\',' +
                 '\'' + sortingDirection + '\')">Previous</button>' +
                 ' ' + totalElements + ' of ' + totalElements;
         }
         else if (currentPage === 0) {
             document.getElementById("pageable_div_id").innerHTML =
-                '<button onclick="getBooks(\'' + nextPage + '\',' +
+                '<button onclick="getFreeBooks(\'' + nextPage + '\',' +
                 '\'' + sortingField + '\',' +
                 '\'' + sortingDirection + '\')">Next</button>' +
                 ' ' + (pageSize * (currentPage + 1)) + ' of ' + totalElements;
-        }
-        else {
+        } else {
             document.getElementById("pageable_div_id").innerHTML =
-                '<button onclick="getBooks(\'' + previousPage + '\',' +
+                '<button onclick="getFreeBooks(\'' + previousPage + '\',' +
                 '\'' + sortingField + '\',' +
                 '\'' + sortingDirection + '\')">Previous</button>' +
-                '<button onclick="getBooks(\'' + nextPage + '\',' +
+                '<button onclick="getFreeBooks(\'' + nextPage + '\',' +
                 '\'' + sortingField + '\',' +
                 '\'' + sortingDirection + '\')">Next</button>' +
                 ' ' + (pageSize * (currentPage + 1)) + ' of ' + totalElements;
@@ -130,7 +129,7 @@ function getBooks(pageNumber, sortingField, sortingDirection) {
 
     function fetchData() {
         $.get(
-            "http://localhost:8080/books/all?page=" + pageNumber
+            "http://localhost:8080/books/free?page=" + pageNumber
             + "&size=" + pageSize
             + "&sort=" + sortingField
             + "&sortingDirection=" + sortingDirection,
@@ -164,11 +163,11 @@ function getBooks(pageNumber, sortingField, sortingDirection) {
                         '        <td>' + balanceActionButton(data.content[i].userId, currentUserId) + '</td>\n' +
                         '    </tr>';
                 }
-                document.getElementById("books_table").innerHTML = html;
+                document.getElementById("books_free_table").innerHTML = html;
                 displayPageable(data.pageable, data.totalElements, data.totalPages);
             });
     }
     fetchData();
 }
 
-getBooks();
+getFreeBooks();

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,6 +41,11 @@ public class UserController {
                             .orElseThrow(() -> new IllegalArgumentException("User with this ID is not exist")));
         }
         else throw new BalanceConditionException("Can't delete user with positive balance");
+    }
+
+    @GetMapping("/current")
+    public User getCurrentUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
 

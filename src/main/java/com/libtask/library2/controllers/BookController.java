@@ -25,7 +25,7 @@ public class BookController {
     }
 
     @GetMapping("/all")
-    public Page<Book> getCatalog(@PageableDefault(sort = "id") Pageable page) {
+    public Page<Book> getCatalog(Pageable page) {
         return bookRepository.findAll(page);
     }
 

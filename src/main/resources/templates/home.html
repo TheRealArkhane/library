@@ -41,16 +41,14 @@
                 <a class="nav-link" href="/books/catalog/free">Доступные книги</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/users/id/books-on-balance">Ваш Баланс</a>
+                <a class="nav-link" href="/balance">Ваш Баланс</a>
             </li>
         </ul>
     </div>
 </nav>
-<h1 th:inline="text", style="font-size: large">
-    Здравствуйте!
-    Добро пожаловать на сайт библиотеки им. Левина!
-</h1>
-<form th:action="@{/logout}" method="post">
+<h1 th:inline="text" style="font-size: large; text-align: center">Здравствуйте!</h1>
+<h2 th:inline="text" style="font-size: large; text-align: center">Добро пожаловать на сайт библиотеки им. Левина!</h2>
+<form th:action="@{/logout}" method="post", style="text-align: center">
     <input type="submit" value="Выйти"/>
 </form>
 </body>

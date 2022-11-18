@@ -35,9 +35,8 @@ public class BalanceController {
                 .orElseThrow(() -> new IllegalArgumentException("Book with this ID is not exist"));
     }
 
-    @GetMapping("/user/{id}")
-    public Page<Book> showUserBalance(
-            @PathVariable(value = "id") Long id, @PageableDefault(sort = "id") Pageable page) {
-        return bookRepository.findTakenBooksByUserId(id, page);
+    @GetMapping("/user")
+    public Page<Book> showUserBalance(Long userId, @PageableDefault(sort = "id") Pageable page) {
+        return bookRepository.findTakenBooksByUserId(userId, page);
     }
 }
