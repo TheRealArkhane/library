@@ -2,6 +2,7 @@ package com.libtask.library2.controllers;
 
 import com.libtask.library2.dto.BookDto;
 import com.libtask.library2.entities.Book;
+import com.libtask.library2.entities.Genre;
 import com.libtask.library2.exceptions.BalanceConditionException;
 import com.libtask.library2.repositories.BookRepository;
 import com.libtask.library2.services.BookService;
@@ -38,6 +39,18 @@ public class BookController {
     public BookDto getBookInfo(@PathVariable(value = "id") Long id) throws IllegalArgumentException {
         return new BookDto(bookRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Book with this ID is not exist")));
+    }
+
+    @PutMapping("/{id}")
+    public Book updateBookInfo(
+            @PathVariable(value = "id") Long id,
+            String isbn,
+            String name,
+            String author,
+            Genre genre) throws IllegalArgumentException {
+        bookRepository.updateBookInfo(isbn, name, author, genre.getName(), id);
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Book with this ID is not exist"));
     }
 
     @DeleteMapping("/{id}")

@@ -1,6 +1,6 @@
 let defaultPageNumber = 0, defaultSortingField = 'id', defaultSortingDirection = 'ASC', pageSize = 10;
 let previousPage, nextPage;
-let currentBookId, currentSortingField;
+let currentBookId, currentSortingField, currentSortingDirection = defaultSortingDirection;
 let currentUserId;
 
 function getCurrentUser() {
@@ -27,11 +27,24 @@ function balanceActionButton(user,currentUser) {
 
 
 $(document).on('click', 'th', function() {
+    let lastUsedSortingField = currentSortingField;
     currentSortingField = $(this).closest('th').text().toString().toLowerCase();
     if (currentSortingField === "condition") {
         currentSortingField = "userId";
     }
-    getBalance(null, currentSortingField, null);
+    if (lastUsedSortingField === currentSortingField) {
+        if (currentSortingDirection === defaultSortingDirection) {
+            currentSortingDirection = "DESC"
+        }
+        else {
+            currentSortingDirection = defaultSortingDirection;
+        }
+        getBalance(null, currentSortingField, currentSortingDirection);
+    }
+    else {
+        currentSortingDirection = defaultSortingDirection;
+        getBalance(null, currentSortingField, currentSortingDirection);
+    }
 });
 
 $(document).on('click', '.take-button', function () {
@@ -109,7 +122,11 @@ function getBalance(pageNumber, sortingField, sortingDirection) {
         if (nextPage >= totalPages) {
             nextPage = totalPages;
         }
-        if (currentPage === totalPages - 1) {
+        if (currentPage === totalPages - 1 && currentPage === 0) {
+            document.getElementById("pageable_div_id").innerHTML =
+                totalElements + ' of ' + totalElements;
+        }
+        else if (currentPage === totalPages - 1) {
             document.getElementById("pageable_div_id").innerHTML =
                 '<button onclick="getBalance(\'' + previousPage + '\',' +
                 '\'' + sortingField + '\',' +
@@ -136,10 +153,11 @@ function getBalance(pageNumber, sortingField, sortingDirection) {
     }
 
     function fetchData() {
-        $.ajax({
-            url: `http://localhost:8080/balance/user?page=${pageNumber}&size=${pageSize}&sort=${sortingField}&sortingDirection=${sortingDirection}`,
-            type: "GET",
-            success:
+        $.get(
+            "http://localhost:8080/balance/user?page=" + pageNumber
+            + "&size=" + pageSize
+            + "&sort=" + sortingField
+            + "," + sortingDirection,
             function (data) {
                 console.log(data);
                 let html = '<tr>\n' +
@@ -170,10 +188,9 @@ function getBalance(pageNumber, sortingField, sortingDirection) {
                         '        <td>' + balanceActionButton(data.content[i].userId, currentUserId) + '</td>\n' +
                         '    </tr>';
                 }
-                document.getElementById("balance_table").innerHTML = html;
+                document.getElementById('balance_table').innerHTML = html;
                 displayPageable(data.pageable, data.totalElements, data.totalPages);
-            }
-    });
+            });
     }
     fetchData();
 }
