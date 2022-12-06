@@ -31,4 +31,9 @@ public class WebController {
         return "login";
     }
 
+    @GetMapping("/users-list")
+    public String usersListPage() {
+        return "users-list";
+    }
+
 }
