@@ -9,13 +9,13 @@ let currentUserId = $.get("http://localhost:8080/users/current", function (user)
     currentUserId = user.id;
 });
 
-function balanceActionButton(user, currentUser) {
+function balanceActionButton(userId, currentUserId) {
     let takeButton="<button type='button' class='take-button'> Take </button>";
     let returnButton="<button type='button' class='return-button'> Return </button>";
-    if(user == null) {
+    if(userId == null) {
         return takeButton;
     }
-    else if (user === currentUser) {
+    else if (userId === currentUserId) {
         return returnButton;
     }
     else return "";
@@ -186,7 +186,7 @@ function getList(url ,pageNumber, sortingField, sortingDirection) {
                     } else if (condition === currentUserId) {
                         condition = "Taken By You"
                     } else condition = "Taken";
-                    html = html + '<tr>\n' +
+                    html += '<tr>\n' +
                         '        <td class="book-row-id">' + data.content[i].id + '</td>\n' +
                         '        <td class="book-row-isbn">' + data.content[i].isbn + '</td>\n' +
                         '        <td class="book-row-name">' + data.content[i].name + '</td>\n' +
