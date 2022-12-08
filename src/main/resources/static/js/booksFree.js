@@ -75,15 +75,9 @@ $(document).on("click", ".submit-update-button",function() {
         data : JSON.stringify(formData),
         dataType : 'json',
         success: function(result){
-            if(result.status === "success"){
                 getList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
-                alert("Книга была успешно изменён");
+                alert("Book information was successfully updated");
                 console.log(result);
-            }
-            if(result.status === "error"){
-                getList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
-                alert("Такой книги не существует");
-            }
         }
     });
 });

@@ -1,120 +1,25 @@
 let defaultPageNumber = 0, defaultSortingField = 'id', defaultSortingDirection = "ASC", pageSize = 10;
 let previousPage, nextPage;
-let currentSortingField = defaultSortingField,
+let currentBookId, currentSortingField = defaultSortingField,
     currentSortingDirection = defaultSortingDirection,
     currentPageNumber = defaultPageNumber;
-let currentBookId;
 let currentUrl = "http://localhost:8080/books/all";
 let currentUserId = $.get("http://localhost:8080/users/current", function (user) {
     console.log(user);
     currentUserId = user.id;
 });
 
-function balanceActionButton(userId, currentUserId) {
+function balanceActionButton(user, currentUser) {
     let takeButton="<button type='button' class='take-button'> Take </button>";
     let returnButton="<button type='button' class='return-button'> Return </button>";
-    if(userId == null) {
+    if(user == null) {
         return takeButton;
     }
-    else if (userId === currentUserId) {
+    else if (user === currentUser) {
         return returnButton;
     }
     else return "";
 }
-
-function deleteActionButton(userId) {
-    let deleteButton="<button type='button' class='delete-button'> Delete </button>";
-
-    if(userId == null) {
-        return deleteButton;
-    }
-    else return "";
-}
-
-$(document).on('click', '.submit-add-button', function () {
-    let formData={
-        isbn: $("#isbn").val(),
-        name: $("#name").val(),
-        author: $("#author").val(),
-        genre: $("#genre").val()
-    }
-    $.ajax({
-        url: "http://localhost:8080/books/add",
-        type: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        data: JSON.stringify(formData),
-        dataType: 'json',
-        success: function () {
-            alert("Book successfully added");
-            getList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
-            },
-            error: function () {
-                alert("Book cannot be added")
-            }
-    })
-});
-
-$(document).on("click", ".submit-update-button",function() {
-    let formData={
-        isbn: $("#isbn").val(),
-        name: $("#name").val(),
-        author: $("#author").val(),
-        genre: $("#genre").val()
-    }
-    console.log(formData);
-
-    $.ajax({
-        url:"http://localhost:8080/books/" + currentBookId,
-        type:"PUT",
-        headers:{
-            "Content-Type":"application/json",
-            "Accept":"application/json"
-        },
-        data : JSON.stringify(formData),
-        dataType : 'json',
-        success: function(result){
-            if(result.status === "success"){
-                getList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
-                alert("Книга была успешно изменён");
-                console.log(result);
-            }
-            if(result.status === "error"){
-                getList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
-                alert("Такой книги не существует");
-            }
-        }
-    });
-});
-
-$(document).on('click','.book-row-name',function(){
-    currentBookId = $(this).closest('tr').find('.book-row-id').text().toString();
-    let modal = document.getElementById('addWindow');
-    let span = document.getElementsByClassName("close")[0];
-    let updateButton=document.getElementById("submit-update-button");
-    let addButton=document.getElementById("submit-add-button");
-
-    updateButton.style.display="block";
-    addButton.style.display="none";
-
-    let currentBookISBN = $(this).closest('tr').find('.book-row-isbn').text().toString();
-    let currentBookName = $(this).closest('tr').find('.book-row-name').text().toString();
-    let currentBookAuthor = $(this).closest('tr').find('.book-row-author').text().toString();
-    let currentBookGenre = $(this).closest('tr').find('.book-row-genre').text().toString();
-
-    $("#isbn").val(currentBookISBN);
-    $("#name").val(currentBookName);
-    $("#author").val(currentBookAuthor);
-    $("#genre").val(currentBookGenre);
-    $("#cr-up-header").text("Изменить книгу");
-    modal.style.display = "block";
-
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-});
 
 
 $(document).on('click', 'th', function() {
@@ -154,7 +59,7 @@ $(document).on('click', '.take-button', function () {
     });
 });
 
-$(document).on('click', '.delete-button', function () {
+$(document).on('click', '.book-row-name', function () {
     currentBookId = $(this).closest('tr').find('.book-row-id').text().toString();
     if (confirm("Delete this book?")) {
         $.ajax({
@@ -192,6 +97,7 @@ $(document).on('click', '.return-button', function () {
 });
 
 
+
 function getList(url ,pageNumber, sortingField, sortingDirection) {
 
     if (pageNumber == null) {
@@ -223,7 +129,7 @@ function getList(url ,pageNumber, sortingField, sortingDirection) {
                 '<button onclick="getList(\'' + currentUrl + '\',' +
                 '\'' + previousPage + '\',' +
                 '\'' + sortingField + '\',' +
-                '\'' + sortingDirection + '\')">Prev</button>' +
+                '\'' + sortingDirection + '\')">Previous</button>' +
                 ' ' + totalElements + ' of ' + totalElements;
         }
         else if (currentPage === 0) {
@@ -239,7 +145,7 @@ function getList(url ,pageNumber, sortingField, sortingDirection) {
                 '<button onclick="getList(\'' + currentUrl + '\',' +
                 '\'' + previousPage + '\',' +
                 '\'' + sortingField + '\',' +
-                '\'' + sortingDirection + '\')">Prev</button>' +
+                '\'' + sortingDirection + '\')">Previous</button>' +
                 '<button onclick="getList(\'' + currentUrl + '\',' +
                 '\'' + nextPage + '\',' +
                 '\'' + sortingField + '\',' +
@@ -271,7 +177,6 @@ function getList(url ,pageNumber, sortingField, sortingDirection) {
                     '        <th class="book-column-genre">Genre</th>\n' +
                     '        <th class="book-column-condition">Condition</th>\n' +
                     '        <th>Actions</th>\n' +
-                    '        <th>Admin Actions</th>\n' +
                     '    </tr>';
 
                 for (let i = 0; i < data.content.length; i++) {
@@ -281,7 +186,7 @@ function getList(url ,pageNumber, sortingField, sortingDirection) {
                     } else if (condition === currentUserId) {
                         condition = "Taken By You"
                     } else condition = "Taken";
-                    html += '<tr>\n' +
+                    html = html + '<tr>\n' +
                         '        <td class="book-row-id">' + data.content[i].id + '</td>\n' +
                         '        <td class="book-row-isbn">' + data.content[i].isbn + '</td>\n' +
                         '        <td class="book-row-name">' + data.content[i].name + '</td>\n' +
@@ -289,7 +194,6 @@ function getList(url ,pageNumber, sortingField, sortingDirection) {
                         '        <td class="book-row-genre">' + data.content[i].genre + '</td>\n' +
                         '        <td class="book-row-condition">' + condition + '</tdclass>\n' +
                         '        <td>' + balanceActionButton(data.content[i].userId, currentUserId) + '</td>\n' +
-                        '        <td>' + deleteActionButton(data.content[i].userId) + '</td>\n' +
                         '    </tr>';
                 }
                 document.getElementById('books-table').innerHTML = html;
