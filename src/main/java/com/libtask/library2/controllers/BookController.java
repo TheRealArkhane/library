@@ -2,7 +2,6 @@ package com.libtask.library2.controllers;
 
 import com.libtask.library2.dto.BookDto;
 import com.libtask.library2.entities.Book;
-import com.libtask.library2.entities.Genre;
 import com.libtask.library2.exceptions.BalanceConditionException;
 import com.libtask.library2.repositories.BookRepository;
 import com.libtask.library2.services.BookService;
