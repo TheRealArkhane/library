@@ -9,18 +9,76 @@ let currentUserId = $.get("http://localhost:8080/users/current", function (user)
     currentUserId = user.id;
 });
 
-function balanceActionButton(user, currentUser) {
+function balanceActionButton(userId, currentUserId) {
     let takeButton="<button type='button' class='take-button'> Take </button>";
     let returnButton="<button type='button' class='return-button'> Return </button>";
-    if(user == null) {
+    if(userId == null) {
         return takeButton;
     }
-    else if (user === currentUser) {
+    else if (userId === currentUserId) {
         return returnButton;
     }
     else return "";
 }
 
+$(document).on('click','.book-row-name',function(){
+    currentBookId = $(this).closest('tr').find('.book-row-id').text().toString();
+    let modal = document.getElementById('addWindow');
+    let span = document.getElementsByClassName("close")[0];
+    let updateButton=document.getElementById("submit-update-button");
+    let addButton=document.getElementById("submit-add-button");
+
+    updateButton.style.display="block";
+    addButton.style.display="none";
+
+    let currentBookISBN = $(this).closest('tr').find('.book-row-isbn').text().toString();
+    let currentBookName = $(this).closest('tr').find('.book-row-name').text().toString();
+    let currentBookAuthor = $(this).closest('tr').find('.book-row-author').text().toString();
+    let currentBookGenre = $(this).closest('tr').find('.book-row-genre').text().toString();
+
+    $("#isbn").val(currentBookISBN);
+    $("#name").val(currentBookName);
+    $("#author").val(currentBookAuthor);
+    $("#genre").val(currentBookGenre);
+    $("#cr-up-header").text("Изменить книгу");
+    modal.style.display = "block";
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+});
+
+$(document).on("click", ".submit-update-button",function() {
+    let formData={
+        isbn: $("#isbn").val(),
+        name: $("#name").val(),
+        author: $("#author").val(),
+        genre: $("#genre").val()
+    }
+    console.log(formData);
+
+    $.ajax({
+        url:"http://localhost:8080/books/" + currentBookId,
+        type:"PUT",
+        headers:{
+            "Content-Type":"application/json",
+            "Accept":"application/json"
+        },
+        data : JSON.stringify(formData),
+        dataType : 'json',
+        success: function(result){
+            if(result.status === "success"){
+                getList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
+                alert("Книга была успешно изменён");
+                console.log(result);
+            }
+            if(result.status === "error"){
+                getList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
+                alert("Такой книги не существует");
+            }
+        }
+    });
+});
 
 $(document).on('click', 'th', function() {
     let lastUsedSortingField = currentSortingField;
@@ -59,26 +117,6 @@ $(document).on('click', '.take-button', function () {
     });
 });
 
-$(document).on('click', '.book-row-name', function () {
-    currentBookId = $(this).closest('tr').find('.book-row-id').text().toString();
-    if (confirm("Delete this book?")) {
-        $.ajax({
-            url: "http://localhost:8080/books/" + currentBookId,
-            type: "DELETE",
-            data: {
-                id: currentBookId
-            },
-            success: function () {
-                alert("Book successfully deleted");
-                getList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
-            },
-            error: function(){
-                alert("Can't delete the book that already taken");
-                getList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
-            }
-        })
-    }
-});
 
 $(document).on('click', '.return-button', function () {
     currentBookId = $(this).closest('tr').find('.book-row-id').text().toString();
@@ -184,7 +222,7 @@ function getList(url ,pageNumber, sortingField, sortingDirection) {
                     } else if (condition === currentUserId) {
                         condition = "Taken By You"
                     } else condition = "Taken";
-                    html = html + '<tr>\n' +
+                    html += '<tr>\n' +
                         '        <td class="book-row-id">' + data.content[i].id + '</td>\n' +
                         '        <td class="book-row-isbn">' + data.content[i].isbn + '</td>\n' +
                         '        <td class="book-row-name">' + data.content[i].name + '</td>\n' +

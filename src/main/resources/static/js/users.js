@@ -9,6 +9,14 @@ let currentUserId = $.get("http://localhost:8080/users/current", function (user)
     currentUserId = user.id;
 });
 
+function deleteActionButton(role) {
+    let deleteButton="<button type='button' class='delete-button'>Delete</button>";
+
+    if(role === "USER") {
+        return deleteButton;
+    }
+    else return "";
+}
 
 $(document).on('click', 'th', function() {
     let lastUsedSortingField = currentSortingField;
@@ -51,6 +59,27 @@ $(document).on('click', '.user-row-last-name', function () {
             error: function(){
                 alert("Can't delete user with positive balance");
                 getUsersList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
+            }
+        })
+    }
+});
+
+$(document).on('click', '.delete-button', function () {
+    let chosenUserId = $(this).closest('tr').find('.user-row-id').text().toString();
+    if (confirm("Delete this user?")) {
+        $.ajax({
+            url: "http://localhost:8080/users/" + chosenUserId,
+            type: "DELETE",
+            data: {
+                id: chosenUserId
+            },
+            success: function () {
+                alert("User successfully deleted");
+                getList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
+            },
+            error: function(){
+                alert("Can't delete the user with positive balance");
+                getList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
             }
         })
     }
@@ -132,7 +161,7 @@ function getUsersList(url ,pageNumber, sortingField, sortingDirection) {
                     '        <th class="user-column-id">ID</th>\n' +
                     '        <th class="user-column-first-name">First Name</th>\n' +
                     '        <th class="user-column-last-name">Last Name</th>\n' +
-                    '        <th class="user-column-role">Role</th>\n' +
+                    '        <th>Admin Actions</th>\n' +
                     '    </tr>';
 
                 for (let i = 0; i < data.content.length; i++) {
@@ -140,7 +169,7 @@ function getUsersList(url ,pageNumber, sortingField, sortingDirection) {
                         '        <td class="user-row-id">' + data.content[i].id + '</td>\n' +
                         '        <td class="user-row-first-name">' + data.content[i].firstName + '</td>\n' +
                         '        <td class="user-row-last-name">' + data.content[i].lastName + '</td>\n' +
-                        '        <td class="user-row-role">' + data.content[i].role + '</td>\n' +
+                        '        <td>' + deleteActionButton(data.content[i].role) + '</td>\n' +
                         '    </tr>';
                 }
                 document.getElementById('users-table').innerHTML = html;
@@ -150,5 +179,4 @@ function getUsersList(url ,pageNumber, sortingField, sortingDirection) {
     }
     fetchData();
 }
-
 getUsersList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);

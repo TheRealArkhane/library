@@ -1,27 +1,22 @@
-const btns = document.querySelectorAll('.add-btn');
-const modalOverlay = document.querySelector('.modal-overlay ');
-const modals = document.querySelectorAll('.modal');
+window.onload=function(){
+    const modal = document.getElementById('addWindow');
+    const btn = document.getElementById("add-book-button");
+    const updateButton=document.getElementById("submit-update-button");
+    const addButton=document.getElementById("submit-add-button");
+    const span = document.getElementsByClassName("close")[0];
 
-btns.forEach((el) => {
-    el.addEventListener('click', (e) => {
-        let path = e.currentTarget.getAttribute('data-path');
-
-        modals.forEach((el) => {
-            el.classList.remove('modal--visible');
-        });
-
-        document.querySelector(`[data-target="${path}"]`).classList.add('modal--visible');
-        modalOverlay.classList.add('modal-overlay--visible');
-    });
-});
-
-modalOverlay.addEventListener('click', (e) => {
-    console.log(e.target);
-
-    if (e.target === modalOverlay) {
-        modalOverlay.classList.remove('modal-overlay--visible');
-        modals.forEach((el) => {
-            el.classList.remove('modal--visible');
-        });
+    btn.onclick = function() {
+        modal.style.display = "block";
+        updateButton.style.display="none";
+        addButton.style.display="block";
+        $("#cr-up-header").text("Добавить книгу");
     }
-});
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+}

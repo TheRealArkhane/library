@@ -44,11 +44,13 @@ public class BookController {
     @PutMapping("/{id}")
     public Book updateBookInfo(
             @PathVariable(value = "id") Long id,
-            String isbn,
-            String name,
-            String author,
-            Genre genre) throws IllegalArgumentException {
-        bookRepository.updateBookInfo(isbn, name, author, genre.getName(), id);
+            @RequestBody BookDto bookDto) throws IllegalArgumentException {
+        bookRepository.updateBookInfo(
+                bookDto.getIsbn(),
+                bookDto.getName(),
+                bookDto.getAuthor(),
+                bookDto.getGenre().getName(),
+                id);
         return bookRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Book with this ID is not exist"));
     }

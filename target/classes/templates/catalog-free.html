@@ -13,7 +13,6 @@
     <title>Каталог</title>
 </head>
 <link rel="stylesheet" href="/css/style.css">
-<script src="/js/booksFree.js"></script>
 <body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
@@ -24,6 +23,10 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+
+<script src="/js/booksFree.js"></script>
+<script src="/js/modal-window.js"></script>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">Библиотека им. Левина</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
@@ -41,10 +44,50 @@
             <li class="nav-item">
                 <a class="nav-link" href="/balance">Ваш Баланс</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/users-list">Пользователи</a>
+            </li>
         </ul>
     </div>
 </nav>
-<table id="books_free_table"></table>
+<table id="free-table"></table>
 <div id="pageable_div_id"></div>
+
+<button id="add-book-button" type="button" class="btn btn-primary">
+    Добавить Книгу
+</button>
+
+<div id="addWindow" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="cr-up-header">Добавить книгу</h2>
+            <span class="close">&times;</span>
+        </div>
+        <form class="bookForm">
+            <div class="form-group">
+                <label for="isbn">Book ISBN</label> <input type="text"
+                                                           class="form-control" id="isbn" placeholder="Enter Book ISBN"
+                                                           name="isbn">
+            </div>
+            <div class="form-group">
+                <label for="name">Book Name</label> <input type="text"
+                                                           class="form-control" id="name" placeholder="Enter Book Name"
+                                                           name="name">
+            </div>
+            <div class="form-group">
+                <label for="author">Author</label> <input type="text"
+                                                          class="form-control" id="author" placeholder="Enter Author's name"
+                                                          name="author">
+            </div>
+            <div class="form-group">
+                <label for="genre">Genre</label> <input type="text"
+                                                        class="form-control" id="genre" placeholder="Enter Genre"
+                                                        name="genre">
+            </div>
+            <button type="submit" id="submit-add-button" class="submit-add-button">Подтвердить</button>
+            <button type="submit" id="submit-update-button" class="submit-update-button">Подтвердить</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>
