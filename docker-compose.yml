@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  db:
+    ports:
+      - '5432:5432'
+    image: 'postgres:14.3-alpine'
+    container_name: 'java-postgres-db'
+    environment:
+      - 'SPRING_JPA_HIBERNATE_DDL_AUTO=update'
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PASSWORD=1234'
+      - 'POSTGRES_DB=Library'
+
+  application:
+    build: ./
+    container_name: 'java-backend-library-app'
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db
