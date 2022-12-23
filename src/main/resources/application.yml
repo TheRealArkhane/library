@@ -11,8 +11,11 @@ spring:
         jdbc: lob.non_contextual_creation= true
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
   data:
     web:
       pageable:
         default-page-size: 10
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+    enabled: true
