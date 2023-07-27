@@ -7,7 +7,7 @@
     <changeSet id="add-books" author="Author" dbms="postgresql">
         <loadUpdateData tableName="book"
                   encoding="UTF-8"
-                  file="db/book.csv"
+                  file="/db/book.csv"
                   separator="," primaryKey="id">
             <column header="id" name="id" type="bigint"/>
             <column header="isbn" name="isbn" type="varchar(255)"/>

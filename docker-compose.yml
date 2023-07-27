@@ -1,22 +1,27 @@
 version: '3.8'
 services:
-  db:
+  database:
     ports:
       - '5432:5432'
-    image: 'postgres:14.3-alpine'
+    image: postgres:latest
     container_name: 'java-postgres-db'
     volumes:
-      - './postgres_data:/var/lib/postgresql'
+      - '/postgres_data:/var/lib/postgresql'
     environment:
       - 'SPRING_JPA_HIBERNATE_DDL_AUTO=update'
       - 'POSTGRES_USER=postgres'
       - 'POSTGRES_PASSWORD=1234'
-      - 'POSTGRES_DB=Library'
+      - 'POSTGRES_ROOT_PASSWORD=1234'
+      - 'POSTGRES_DB=library'
+      - 'PGDATA=/var/lib/postgresql/data'
 
   application:
     build: ./
     container_name: 'java-backend-library-app'
+    image: 'library-app'
+    environment:
+      - 'spring.datasource.url=jdbc:postgresql://database:5432/library'
     ports:
       - '8080:8080'
     depends_on:
-      - db
+      - database

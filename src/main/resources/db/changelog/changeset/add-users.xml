@@ -7,7 +7,7 @@
     <changeSet id="add-users" author="Author" dbms="postgresql">
         <loadUpdateData tableName="app_user"
                   encoding="UTF-8"
-                  file="db/app_user.csv"
+                  file="/db/app_user.csv"
                   separator="," primaryKey="id">
             <column name="id" type="bigint"/>
             <column name="first_name" type="varchar(255)"/>

@@ -11,7 +11,6 @@ let currentUserId = $.get("http://localhost:8080/users/current", function (user)
 
 function deleteActionButton(role) {
     let deleteButton="<button type='button' class='delete-button'>Delete</button>";
-
     if(role === "USER") {
         return deleteButton;
     }
@@ -39,28 +38,6 @@ $(document).on('click', 'th', function() {
     else {
         currentSortingDirection = defaultSortingDirection;
         getUsersList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
-    }
-});
-
-
-$(document).on('click', '.user-row-last-name', function () {
-    let chosenUserId = $(this).closest('tr').find('.user-row-id').text().toString();
-    if (confirm("Delete this user?")) {
-        $.ajax({
-            url: "http://localhost:8080/users/" + chosenUserId,
-            type: "DELETE",
-            data: {
-                id: chosenUserId
-            },
-            success: function () {
-                alert("User successfully deleted");
-                getUsersList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
-            },
-            error: function(){
-                alert("Can't delete user with positive balance");
-                getUsersList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
-            }
-        })
     }
 });
 

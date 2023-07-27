@@ -9,25 +9,25 @@
         <dbms type="postgresql"/>
     </preConditions>
 
-    <include file="changeset/create-book-table.xml" relativeToChangelogFile="true"/>
+    <include file="/changeset/create-book-table.xml" relativeToChangelogFile="true"/>
 
     <changeSet id="create-books-table" author="Author">
         <tagDatabase tag="create books table"/>
     </changeSet>
 
-    <include file="changeset/create-users-table.xml" relativeToChangelogFile="true"/>
+    <include file="/changeset/create-users-table.xml" relativeToChangelogFile="true"/>
 
     <changeSet id="create-users-table" author="Author">
         <tagDatabase tag="create users table"/>
     </changeSet>
 
-    <include file="changeset/add-books.xml" relativeToChangelogFile="true"/>
+    <include file="/changeset/add-books.xml" relativeToChangelogFile="true"/>
 
     <changeSet id="add-books" author="Author">
         <tagDatabase tag="add-books"/>
     </changeSet>
 
-    <include file="changeset/add-users.xml" relativeToChangelogFile="true"/>
+    <include file="/changeset/add-users.xml" relativeToChangelogFile="true"/>
 
     <changeSet id="add-users" author="Author">
         <tagDatabase tag="add-users"/>

@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db:5432/Library
+    url: jdbc:postgresql://database:5432/library
     username: postgres
     password: 1234
     driver-class-name: org.postgresql.Driver
@@ -11,7 +11,7 @@ spring:
         jdbc: lob.non_contextual_creation= true
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
   data:
     web:
       pageable:

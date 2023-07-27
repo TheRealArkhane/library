@@ -19,6 +19,7 @@ public class Book {
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     Long id;
     @NonNull
     @Column(name = "isbn")
@@ -32,7 +33,7 @@ public class Book {
     @NonNull
     @Column(name = "genre")
     Genre genre;
-    @Column(name = "user_id")
+    @Column(name = "user_id", columnDefinition = "NUMERIC(19,0)")
     Long userId;
 }
 
