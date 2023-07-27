@@ -11,8 +11,9 @@
     </preConditions>
     <comment>Creating Table named: book...</comment>
     <createTable tableName="book" schemaName="public">
-        <column name="id" type="bigint" >
-            <constraints primaryKey="true" nullable="false"/>
+        <column name="id" type="bigint" autoIncrement="true" startWith="1000" incrementBy="1">
+            <constraints primaryKey="true"/>
+
         </column>
         <column name="isbn" type="varchar(255)">
             <constraints nullable="false"/>
@@ -30,4 +31,5 @@
         </column>
     </createTable>
 </changeSet>
+
 </databaseChangeLog>

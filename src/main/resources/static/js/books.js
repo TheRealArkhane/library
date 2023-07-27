@@ -49,6 +49,7 @@ $(document).on('click', '.submit-add-button', function () {
         dataType: 'json',
         success: function () {
             alert("Book successfully added");
+            console.log(formData)
             getList(currentUrl, currentPageNumber, currentSortingField, currentSortingDirection);
             },
             error: function () {
